@@ -1,0 +1,123 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eaebe1, rgb(140, 141, 125));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+
+/* Form container */
+
+.form-container {
+    width: 100%;
+    max-width: 450px;
+    /* Adjust as needed */
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    text-align: center;
+    color: #444444;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 5px;
+    color: #34495e;
+}
+
+
+/* Ensure all form elements have the same width */
+
+input,
+textarea,
+select {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    box-sizing: border-box;
+    /* Prevents width issues */
+    font-size: 14px;
+}
+
+
+/* File input styling */
+
+input[type="file"] {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+}
+
+
+/* Consistent styling for checkboxes and radios */
+
+.checkbox-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+button {
+    background-color: #2980b9;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #1f6691;
+}
+
+.back {
+    display: flex;
+    align-items: center;
+    padding-bottom: 15px;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back i {
+    margin-right: 5px;
+}
+
+#color {
+    width: 40px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+}
+
+#colorCode {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 4px;
+    background-color: #f3f3f3;
+    display: inline-block;
+}

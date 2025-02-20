@@ -1,0 +1,64 @@
+<?php $data = $this->getCategoryData(); ?>
+
+<h2>All Category</h2>
+<div class="col-md-2">
+    <a class="add-new" href="?m=admin&v=category&a=addCategory">add category</a>
+</div>
+<?php if (count($data) > 0): ?>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Product_Count</th>
+        <th>Created_at</th>
+        <th>Updated_at</th>
+        <th>Visibility</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+
+    <?php foreach ($data as $cat): ?>
+    <tr>
+        <td>
+            <?php echo $cat->getCategoryId(); ?>
+        </td>
+        <td>
+            <?php echo $cat->getName(); ?>
+        </td>
+        <td>
+            <?php echo $cat->getDescription(); ?>
+        </td>
+        <td>
+            <img src="<?php echo $cat->getImage(); ?>" alt="Category Image" width="100" height="100" style="border-radius: 5px;">
+            <!-- <?php echo $cat->getImage(); ?> -->
+        </td>
+        <td>
+            <?php echo $cat->getProductCount(); ?>
+        </td>
+        <td>
+            <?php echo $cat->getCreatedAt(); ?>
+        </td>
+        <td>
+            <?php echo $cat->getUpdatedAt(); ?>
+        </td>
+        <td>
+            <?php echo $cat->getVisibility(); ?>
+        </td>
+        <td>
+            <a href=''> <i class='fa fa-edit' style="color:blue;"></i></a>
+        </td>
+        <td>
+            <form method="POST" action="">
+                <button name="deleteid" value="<?php echo $cat->getCategoryId(); ?>" onclick="return confirm('Are you sure you want to delete this record?')">
+                    <i class="fas fa-trash" style="color:red;"></i>
+                </button>
+            </form>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</table>
+<?php else: ?>
+<p>No Category available. </p>
+<?php endif; ?>
