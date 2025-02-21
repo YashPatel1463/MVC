@@ -13,14 +13,17 @@
 
             <div class="form-group">
                 <label for="name">Product Name:</label>
-                <input type="text" id="name" name="catlog_product[name]" value="<?php echo $data->getName(); ?>">
-                <span id="name-error"></span>
+                <div class="input-group">
+                    <input type="text" id="name" name="catlog_product[name]" value="<?php echo $data->getName(); ?>">
+                    <span id="name-error"></span>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="category">Category:</label>
-                <select id="category" name="catlog_product[category_id]">
-                    <option value="">Select Category</option>
+                <div class="input-group">
+                    <select id="category" name="catlog_product[category_id]">
+                    <option value="" disabled selected>Select Category</option>
                     <?php foreach ($categories as $cat): 
                             $select = "";
                             if(!empty($data)) {
@@ -28,22 +31,31 @@
                             }?>
                     <option <?php echo $select; ?>  value="<?php echo $cat->getCategoryId(); ?>"><?php echo $cat->getName(); ?></option>
                     <?php endforeach; ?>
-                </select>
+                    </select>
+                    <span id="category-error"></span>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="description">Description:</label>
-                <textarea id="description" name="catlog_product[description]"><?php echo (!empty($data))?$data->getDescription(): ''; ?></textarea>
+                <div class="input-group">
+                    <textarea id="description" name="catlog_product[description]"><?php echo (!empty($data))?$data->getDescription(): ''; ?></textarea>
+                    <span id="description-error"></span>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="price">Price:</label>
-                <input type="number" id="price" name="catlog_product[price]" value="<?php echo (!empty($data)) ? $data->getPrice() : ''; ?>">
+                <div class="input-group">
+                    <input type="number" id="price" name="catlog_product[price]" value="<?php echo (!empty($data)) ? $data->getPrice() : ''; ?>">
+                    <span id="price-error"></span>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="image">Product Image:</label>
                 <?php if(!empty($data) && !empty($data->getImage())): ?>
+
                 <input type="text" value="<?php echo (!empty($data)) ? $data->getImage() : ''; ?>" readonly>
                 <img src="<?php echo Mage::getBaseUrl().$data->getImage(); ?>" alt="Product Image" width="100" height="100" style="border-radius: 5px;">
                 <?php endif; ?>
@@ -54,6 +66,8 @@
             <div class="form-group">
                 <label for="rating">Rating:</label>
                 <input type="range" id="rating" name="catlog_product[rating]" min="1" max="5" step="0.1" value="<?php echo (!empty($data)) ? $data->getRating() : '0'; ?>" oninput="updateRatingValue(this.value)">
+                <span id="rating-error"></span>
+
                 <span id="ratingValue"><?php echo (!empty($data)) ? $data->getRating() : '0'; ?></span>
             </div>
 
@@ -66,22 +80,34 @@
 
             <div class="form-group">
                 <label for="size">Size:</label>
-                <input type="number" id="size" name="catlog_product[size]" value="<?php echo (!empty($data)) ? $data->getSize() : ''; ?>">
+                <div class="input-group">
+                    <input type="number" id="size" name="catlog_product[size]" value="<?php echo (!empty($data)) ? $data->getSize() : ''; ?>">
+                    <span id="size-error"></span>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="brand">Brand:</label>
-                <input type="text" id="brand" name="catlog_product[brand]" value="<?php echo (!empty($data)) ? $data->getBrand() : ''; ?>">
+                <div class="input-group">
+                    <input type="text" id="brand" name="catlog_product[brand]" value="<?php echo (!empty($data)) ? $data->getBrand() : ''; ?>">
+                    <span id="brand-error"></span>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="warranty">Warranty (in years):</label>
-                <input type="number" id="warranty" name="catlog_product[warranty]" value="<?php echo (!empty($data)) ? $data->getWarranty() : ''; ?>" step="0.1">
+                <div class="input-group">
+                    <input type="number" id="warranty" name="catlog_product[warranty]" value="<?php echo (!empty($data)) ? $data->getWarranty() : ''; ?>" step="0.1">
+                    <span id="warranty-error"></span>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="weight">Weight (kg):</label>
-                <input type="number" id="weight" name="catlog_product[weight]" value="<?php echo (!empty($data)) ? $data->getWeight() : ''; ?>" step="0.01">
+                <div class="input-group">
+                    <input type="number" id="weight" name="catlog_product[weight]" value="<?php echo (!empty($data)) ? $data->getWeight() : ''; ?>" step="0.01">
+                    <span id="weight-error"></span>
+                </div>
             </div>
 
             <div class="form-group">
@@ -98,7 +124,10 @@
 
             <div class="form-group">
                 <label for="model">Model:</label>
-                <input type="text" id="model" name="catlog_product[model]" value="<?php echo (!empty($data)) ? $data->getModel() : ''; ?>">
+                <div class="input-group">
+                    <input type="text" id="model" name="catlog_product[model]" value="<?php echo (!empty($data)) ? $data->getModel() : ''; ?>">
+                    <span id="model-error"></span>
+                </div>
             </div>
 
             <?php if(!isset($_data)): ?>
@@ -110,21 +139,29 @@
 
             <div class="form-group">
                 <label for="material">Material:</label>
-                <input type="text" id="material" name="catlog_product[material]" value="<?php echo (!empty($data)) ? $data->getMaterial() : ''; ?>">
+                <div class="input-group">
+                    <input type="text" id="material" name="catlog_product[material]" value="<?php echo (!empty($data)) ? $data->getMaterial() : ''; ?>">
+                    <span id="material-error"></span>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="t_and_c">Terms & Conditions:</label>
-                <textarea id="t_and_c" name="catlog_product[t_and_c]"><?php echo (!empty($data)) ? $data->getTAndC() : ''; ?></textarea>
+                <div class="input-group">
+                    <textarea id="t_and_c" name="catlog_product[t_and_c]"><?php echo (!empty($data)) ? $data->getTAndC() : ''; ?></textarea>
+                    <span id="t_and_c-error"></span>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="status">Status:</label>
-                <select id="status" name="catlog_product[status]">
+                <div class="input-group">
+                    <select id="status" name="catlog_product[status]">
                     <option value="" disabled selected>Select Status</option>
                     <option <?php echo ($data->getStatusText() == "Enable") ? "selected" : "" ?> value="1">Enable</option>
                     <option <?php echo ($data->getStatusText() == "Disable") ? "selected" : "" ?> value="0">Disable</option>
                 </select>
+                </div>
             </div>
 
             <button id="submit" type="submit">Submit</button>
