@@ -6,6 +6,7 @@ class Admin_Controller_Product_Index {
         $layout =  Mage::getBlock('core/layout');
         $new = $layout->createBlock('admin/product_index_new');
         $layout->getChild('content')->addChild('new', $new);
+        $layout->getChild('head')->addJs('page/admin/new.js');
         $layout->toHtml();
     }
 
@@ -70,6 +71,14 @@ class Admin_Controller_Product_Index {
         //             ->setTemplate('admin/product/index/delete.phtml');
         // $layout->getChild('content')->addChild('delete', $delete);
         // $layout->toHtml();
+    }
+
+    public function testAction() {
+        // echo get_class() . "<br>" . __FUNCTION__;
+        $layout =  Mage::getBlock('core/layout');
+        $test = $layout->createBlock('admin/product_index_test');
+        $layout->getChild('content')->addChild('test', $test);
+        $layout->toHtml();
     }
 
 

@@ -4,7 +4,7 @@
 
 ?>
     <div class="form-container">
-        <form method="POST" action="<?php echo $this->getUrl('*/*/save') ?>" enctype="multipart/form-data">
+        <form method="POST" id="product2" action="<?php echo $this->getUrl('*/*/save') ?>" enctype="multipart/form-data" onsubmit="return validate()">
             <h2>Enter Product Details</h2>
 
             <?php if(!isset($_data)): ?>
@@ -13,12 +13,13 @@
 
             <div class="form-group">
                 <label for="name">Product Name:</label>
-                <input type="text" id="name" name="catlog_product[name]" value="<?php echo $data->getName(); ?>" required>
+                <input type="text" id="name" name="catlog_product[name]" value="<?php echo $data->getName(); ?>">
+                <span id="name-error"></span>
             </div>
 
             <div class="form-group">
                 <label for="category">Category:</label>
-                <select id="category" name="catlog_product[category_id]" required>
+                <select id="category" name="catlog_product[category_id]">
                     <option value="">Select Category</option>
                     <?php foreach ($categories as $cat): 
                             $select = "";
@@ -32,12 +33,12 @@
 
             <div class="form-group">
                 <label for="description">Description:</label>
-                <textarea id="description" name="catlog_product[description]" required><?php echo (!empty($data))?$data->getDescription(): ''; ?></textarea>
+                <textarea id="description" name="catlog_product[description]"><?php echo (!empty($data))?$data->getDescription(): ''; ?></textarea>
             </div>
 
             <div class="form-group">
                 <label for="price">Price:</label>
-                <input type="number" id="price" name="catlog_product[price]" value="<?php echo (!empty($data)) ? $data->getPrice() : ''; ?>" required>
+                <input type="number" id="price" name="catlog_product[price]" value="<?php echo (!empty($data)) ? $data->getPrice() : ''; ?>">
             </div>
 
             <div class="form-group">
@@ -65,12 +66,12 @@
 
             <div class="form-group">
                 <label for="size">Size:</label>
-                <input type="number" id="size" name="catlog_product[size]" value="<?php echo (!empty($data)) ? $data->getSize() : ''; ?>" required>
+                <input type="number" id="size" name="catlog_product[size]" value="<?php echo (!empty($data)) ? $data->getSize() : ''; ?>">
             </div>
 
             <div class="form-group">
                 <label for="brand">Brand:</label>
-                <input type="text" id="brand" name="catlog_product[brand]" value="<?php echo (!empty($data)) ? $data->getBrand() : ''; ?>" required>
+                <input type="text" id="brand" name="catlog_product[brand]" value="<?php echo (!empty($data)) ? $data->getBrand() : ''; ?>">
             </div>
 
             <div class="form-group">
@@ -85,7 +86,7 @@
 
             <div class="form-group">
                 <label for="made_in">Made In:</label>
-                <select id="made_in" name="catlog_product[made_in]" required>
+                <select id="made_in" name="catlog_product[made_in]">
                     <option value="India">India</option>
                     <option value="China">China</option>
                     <option value="Russia">Russia</option>
@@ -97,7 +98,7 @@
 
             <div class="form-group">
                 <label for="model">Model:</label>
-                <input type="text" id="model" name="catlog_product[model]" value="<?php echo (!empty($data)) ? $data->getModel() : ''; ?>" required>
+                <input type="text" id="model" name="catlog_product[model]" value="<?php echo (!empty($data)) ? $data->getModel() : ''; ?>">
             </div>
 
             <?php if(!isset($_data)): ?>
@@ -109,17 +110,17 @@
 
             <div class="form-group">
                 <label for="material">Material:</label>
-                <input type="text" id="material" name="catlog_product[material]" value="<?php echo (!empty($data)) ? $data->getMaterial() : ''; ?>" required>
+                <input type="text" id="material" name="catlog_product[material]" value="<?php echo (!empty($data)) ? $data->getMaterial() : ''; ?>">
             </div>
 
             <div class="form-group">
                 <label for="t_and_c">Terms & Conditions:</label>
-                <textarea id="t_and_c" name="catlog_product[t_and_c]" required><?php echo (!empty($data)) ? $data->getTAndC() : ''; ?></textarea>
+                <textarea id="t_and_c" name="catlog_product[t_and_c]"><?php echo (!empty($data)) ? $data->getTAndC() : ''; ?></textarea>
             </div>
 
             <div class="form-group">
                 <label for="status">Status:</label>
-                <select id="status" name="catlog_product[status]" required>
+                <select id="status" name="catlog_product[status]">
                     <option value="" disabled selected>Select Status</option>
                     <option <?php echo ($data->getStatusText() == "Enable") ? "selected" : "" ?> value="1">Enable</option>
                     <option <?php echo ($data->getStatusText() == "Disable") ? "selected" : "" ?> value="0">Disable</option>

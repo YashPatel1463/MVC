@@ -142,7 +142,7 @@ class Core_Model_Resource_Collection_Abstract
         }
 
 
-        die($query);
+        // die($query);
         return $query;
     }
 
