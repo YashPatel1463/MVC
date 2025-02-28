@@ -20,8 +20,12 @@ class Core_Model_Resource_Collection_Abstract
 
     public function select($columns = ["*"])
     {
-        $this->_select['FROM'] = $this->_resource->getTableName();
-        $this->_select['COLUMNS'] = is_array($columns) ? $columns : [$columns];
+        $this->_select['FROM'] = ["main_table" => $this->_resource->getTableName()];
+        // $this->_select['COLUMNS'] = is_array($columns) ? $columns : [$columns];
+        $columns = is_array($columns) ? $columns : [$columns];
+        foreach ($columns as $column) {
+            $this->_select['COLUMNS'][] = "main_table.".$column;
+        }
         return $this;
     }
 
@@ -53,12 +57,13 @@ class Core_Model_Resource_Collection_Abstract
 
     public function prepareQuery()
     {
-        $query = sprintf("SELECT %s FROM %s", implode(", ", $this->_select['COLUMNS']), $this->_select['FROM']);
+        $query = sprintf("SELECT %s FROM %s AS %s", implode(", ", $this->_select['COLUMNS']), $this->getTableName($this->_select['FROM']), $this->getTableAlias($this->_select['FROM']));
+        // $query = sprintf("SELECT %s FROM %s AS %s", implode(", ", $this->_select['COLUMNS']), array_values($this->_select['FROM'])[0], array_keys($this->_select['FROM'])[0]);
 
         if (isset($this->_select['JOIN'])) {
             $joinsql = "";
             foreach ($this->_select["JOIN"] as $join) {
-                $joinsql = sprintf(" JOIN %s ON %s ", $join['tablename'], $join['condition']);
+                $joinsql .= sprintf(" JOIN %s ON %s ", $join['tablename'], $join['condition']);
             }
             $query .= $joinsql;
         }
@@ -66,7 +71,7 @@ class Core_Model_Resource_Collection_Abstract
         if (isset($this->_select['LEFT_JOIN'])) {
             $leftjoinsql = "";
             foreach ($this->_select["LEFT_JOIN"] as $leftjoin) {
-                $leftjoinsql = sprintf(" LEFT JOIN %s ON %s ", $leftjoin['tablename'], $leftjoin['condition']);
+                $leftjoinsql .= sprintf(" LEFT JOIN %s AS %s ON %s ", $this->getTableName($leftjoin['tablename']),$this->getTableAlias($leftjoin['tablename']),  $leftjoin['condition']);
             }
             $query .= " " . $leftjoinsql;
         }
@@ -74,7 +79,7 @@ class Core_Model_Resource_Collection_Abstract
         if (isset($this->_select['RIGHT_JOIN'])) {
             $rightjoinsql = "";
             foreach ($this->_select["RIGHT_JOIN"] as $rightjoin) {
-                $rightjoinsql = sprintf(" RIGHT JOIN %s ON %s ", $rightjoin['tablename'], $rightjoin['condition']);
+                $rightjoinsql .= sprintf(" RIGHT JOIN %s ON %s ", $rightjoin['tablename'], $rightjoin['condition']);
             }
             $query .= " " . $rightjoinsql;
         }
@@ -82,7 +87,7 @@ class Core_Model_Resource_Collection_Abstract
         if (isset($this->_select['FULL_JOIN'])) {
             $fulljoinsql = "";
             foreach ($this->_select["FULL_JOIN"] as $fulljoin) {
-                $fulljoinsql = sprintf(" FULL JOIN %s ON %s ", $fulljoin['tablename'], $fulljoin['condition']);
+                $fulljoinsql .= sprintf(" FULL JOIN %s ON %s ", $fulljoin['tablename'], $fulljoin['condition']);
             }
             $query .= " " . $fulljoinsql;
         }
@@ -141,8 +146,8 @@ class Core_Model_Resource_Collection_Abstract
             $query .= $limit;
         }
 
-
-        // die($query);
+        // echo $query;
+        // die();
         return $query;
     }
 
@@ -198,7 +203,7 @@ class Core_Model_Resource_Collection_Abstract
         $this->_select["LEFT_JOIN"][] = ["tablename" => $tableName, "condition" => $condition, "columns" => $columns];
 
         foreach ($columns as $alias => $columnname) {
-            $this->_select['COLUMNS'][] = sprintf("%s.%s AS %s", $tableName, $columnname, $alias);
+            $this->_select['COLUMNS'][] = sprintf("%s.%s AS %s", $this->getTableAlias($tableName), $columnname, $alias);
         }
         return $this;
     }
@@ -261,4 +266,13 @@ class Core_Model_Resource_Collection_Abstract
         $this->_select["LIMIT"] = ["limit" => $limit, "offset"=>$offset];
         return $this;
     }
+
+    private function getTableAlias($table) {
+        return array_keys($table)[0];
+    }
+
+    private function getTableName($table) {
+        return array_values($table)[0];
+    }
+    
 }

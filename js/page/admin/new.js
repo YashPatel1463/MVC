@@ -55,7 +55,7 @@ function validate() {
 
     if (warranty == '' || warranty > 0) {
         document.getElementById('warranty-error').innerHTML = 'warranty is required*';
-        return false;
+        // return false;
     } else {
         document.getElementById('warranty-error').innerHTML = '';
     }

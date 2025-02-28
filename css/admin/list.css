@@ -1,0 +1,93 @@
+/* General Table Styles */
+
+.table-container {
+    width: 90%;
+    margin: 20px auto;
+    overflow-x: auto;
+    /* Ensures responsiveness */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+
+/* Table Header */
+
+thead {
+    background-color: #007bff;
+    color: white;
+    text-align: left;
+}
+
+th,
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+/* Alternating row colors */
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+
+/* Hover effect */
+
+tbody tr:hover {
+    background-color: #e3f2fd;
+}
+
+
+/* Buttons */
+
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.edit-btn {
+    background-color: #ffc107;
+    color: black;
+}
+
+.edit-btn:hover {
+    background-color: #e0a800;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+    th,
+    td {
+        padding: 8px;
+    }
+    .btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}

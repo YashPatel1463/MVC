@@ -4,8 +4,8 @@ class Core_Model_Request {
     protected $_moduleName = "";
     protected $_controllerName = "";
     protected $_actionName = "";
-    protected $_baseUrl = 'http://localhost/mvc/';
-    protected $_baseDir = 'C:\xampp\htdocs\Mvc';
+    protected $_baseUrl = 'http://localhost/mvcproject/';
+    protected $_baseDir = 'C:\xampp\htdocs\Mvcproject';
 
     public function __construct() {
         $uri = $this->getRequestUri();
@@ -25,7 +25,7 @@ class Core_Model_Request {
 
     public function getRequestUri() {
         $baseurl = $_SERVER['REQUEST_URI'];
-        $baseurl = str_replace("/mvc/", "", $baseurl);
+        $baseurl = str_replace("/mvcproject/", "", $baseurl);
         return $baseurl;
     }
 
@@ -47,6 +47,10 @@ class Core_Model_Request {
         } else {
             return "";
         }
+    }
+
+    public function getParams() {
+        return $_POST;
     }
     
     public function getQuery($field) {

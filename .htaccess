@@ -30,7 +30,7 @@
 ## you can put here your mvc root folder
 ## path relative to web root
 
-    #RewriteBase /mvc/
+    #RewriteBase /mvcproject/
 
 ############################################
 ## TRACE and TRACK HTTP methods disabled to prevent XSS attacks

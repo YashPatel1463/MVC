@@ -9,10 +9,10 @@ class Admin_Block_Product_Index_New extends Core_Block_Template {
         $class = Mage::getModel('core/request');
         // echo "<pre>";
         // print_r($class);
-        $id = $class->getQuery('id');
+        $id = $class->getQuery('edit_id');
         // echo $id;
         return Mage::getModel('catalog/product')
-                        ->load($id);
+                    ->load($id);
                         // print_r($data);
                         // echo "</pre>";
     }
@@ -20,9 +20,19 @@ class Admin_Block_Product_Index_New extends Core_Block_Template {
     public function getCategoryData()
     {
         $product = Mage::getModel('catalog/category')
-            ->getCollection();
+            ->getCollection()
+            ->addFieldToFilter("parent_id",[">="=>"1"]);
         return $product->getData();
     }
+
+    public function getAttributeData()
+    {
+        $attributes = Mage::getModel('catalog/attribute')
+            ->getCollection();
+        return $attributes->getData();
+    }
+
+    
 
     public function getHtmlField($field, $data) {
         $field = ucfirst(strtolower($field));

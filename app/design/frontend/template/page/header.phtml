@@ -1,1 +1,70 @@
-<h1> header </h1>
+<?php 
+$categories=$this->getCategories(); 
+$allSubcategories = []; // Store all subcategories initially
+
+// Fetch all subcategories for each category (without AJAX)
+foreach ($categories as $cat) {
+    $allSubcategories[$cat->getCategoryId()] = $this->getSubCategoey($cat->getCategoryId());
+}
+?>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">LOGO</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="<?= Mage::getBaseUrl() ?>">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown" id="categories-dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button">
+                        Categories
+                    </a>
+                </li>
+            </ul>
+            <form class="d-flex align-items-center">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                </div>
+            </form>
+            <a href="login" class="btn btn-outline-primary ms-2">
+                <i class="bi bi-person"></i>
+            </a>
+            <a href="cart" class="btn btn-outline-dark ms-2">
+                <i class="bi bi-cart"></i>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Horizontal Category Menu (Hidden Initially) -->
+<div class="main-categories-container" id="mainCategoriesContainer">
+    <div class="main-categories">
+        <?php foreach ($categories as $cat): ?>
+        <a href="#" class="main-category" data-category-id="<?= $cat->getCategoryId(); ?>">
+            <?php echo $cat->getName(); ?>
+        </a>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<!-- Vertical Subcategory Box (Hidden Initially) -->
+<div class="subcategory-container" id="subcategoryBox">
+    <div id="subcategoriesList"></div>
+</div>
+
+<!-- Hidden Subcategory Data -->
+<div id="subcategoryData" style="display: none;">
+    <?php foreach ($allSubcategories as $categoryId => $subcategories): ?>
+
+    <div id="config" data-base-url="<?= Mage::getBaseUrl(); ?>"></div>
+    <div id="subcat-<?= $categoryId ?>" data-subcategories='<?= json_encode(array_map(fn($sub) => ["id" => $sub->getCategoryId(), "name" => $sub->getName()], $subcategories)); ?>'></div>
+    <?php endforeach; ?>
+</div>

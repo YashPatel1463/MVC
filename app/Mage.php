@@ -1,6 +1,7 @@
 <?php
 
 class Mage {
+    private static $registry = [];
     public static function init() {
         $front = new Core_Controller_Front();
         // $action = new Core_Controller_Front_Action();
@@ -15,6 +16,20 @@ class Mage {
         return new $class;
     }
 
+    public static function getSingleTon($class) {
+        // echo $className;
+        $class = str_replace("/", "_Model_", $class);
+        $class = ucwords($class, "_");
+        // echo $class . "<br>";
+
+        if(isset(self::$registry[$class])) {
+            return self::$registry[$class];
+        } else {
+            return self::$registry[$class] = new $class();
+        } 
+    }
+
+
     public static function getBlock($class) {
         // echo $className;
         $class = str_replace("/", "_Block_", $class);
@@ -24,11 +39,11 @@ class Mage {
     }
     
     public static function getBaseDir() {
-        return 'C:/xampp/htdocs/Mvc/';
+        return 'C:/xampp/htdocs/Mvcproject/';
     }
     
     public static function getBaseUrl() {
-        return 'http://localhost/mvc/';
+        return 'http://localhost/mvcproject/';
     }
 }
 

@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-lg bg-secondary text-white">
+                <div class="card-header bg-dark text-white text-center">
+                    <h4>Login</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="<?php echo $this->getUrl('*/*/loginPost') ?>" id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" id="username" name="admin[username]" class="form-control bg-dark text-white" required>
+                            <span id="username-error" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" name="admin[password]" class="form-control bg-dark text-white" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-light">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

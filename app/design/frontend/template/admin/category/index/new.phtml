@@ -1,0 +1,33 @@
+<?php $category = $this->getCategory(); ?>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">Add Category</div>
+        <div class="card-body">
+            <form method="POST" action="<?php echo $this->getUrl('*/*/save') ?>" id="categoryForm">
+                <input type="hidden" name="catalog_category[category_id]" value="<?= $category->getCategoryId() ?>">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Category Name</label>
+                    <input type="text" id="name" name="catalog_category[name]" class="form-control" value="<?= $category->getName() ?>" required>
+                    <span id="name-error" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea id="description" name="catalog_category[description]" class="form-control" rows="3"><?= $category->getDescription() ?></textarea>
+                    <span id="description-error" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="parent_id" class="form-label">Parent Category</label>
+                    <select id="parent_id" name="catalog_category[parent_id]" class="form-control">
+                        <!-- <option value="0">None</option> -->
+                        <?php foreach ($this->getCategories() as $cate): 
+                                $select = ($cate->getCategoryId() == $category->getCategoryId()) ? "selected" : "";
+                        ?>
+                            <option <?= $select ?> value="<?php echo $cate->getCategoryId(); ?>"><?= htmlspecialchars($cate->getName()) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

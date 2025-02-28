@@ -1,134 +1,69 @@
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #eaebe1, rgb(140, 141, 125));
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-}
+/* .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+} */
 
 
-/* Form container */
-
-.form-container {
-    width: 100%;
-    max-width: 450px;
-    /* Adjust as needed */
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-h2 {
-    text-align: center;
-    color: #444444;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-    display: flex;
-}
-
-label {
-    font-weight: bold;
-    display: inline-block;
-    margin-bottom: 5px;
-    width: 150px;
-    color: #34495e;
-}
+/* Prevent Bootstrap's default hover behavior */
 
 
-/* Ensure all form elements have the same width */
+/* .nav-item.dropdown .dropdown-toggle::after {
+    display: none;
+} */
 
-input,
-textarea,
-select {
-    display: inline-block;
-    width: 100%;
+.main-categories-container,
+.subcategory-container {
+    display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
     padding: 10px;
-    border: 1px solid #bdc3c7;
-    border-radius: 5px;
-    box-sizing: border-box;
-    /* Prevents width issues */
-    font-size: 14px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
 }
 
 
-/* File input styling */
+/* Horizontal category menu */
 
-input[type="file"] {
+.main-categories-container {
+    top: 50px;
+    /* Adjust below navbar */
+    /* left: 10%; */
     width: 100%;
-    border: none;
-    background-color: transparent;
+    text-align: center;
 }
 
-
-/* Consistent styling for checkboxes and radios */
-
-.checkbox-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.checkbox-group label {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-button {
-    background-color: #2980b9;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-button:hover {
-    background-color: #1f6691;
-}
-
-.back {
-    display: flex;
-    align-items: center;
-    padding-bottom: 15px;
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.back i {
-    margin-right: 5px;
-}
-
-#color {
-    width: 40px;
-    height: 40px;
-    border: none;
-    cursor: pointer;
-}
-
-#colorCode {
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 4px;
-    background-color: #f3f3f3;
+.main-categories a {
     display: inline-block;
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    padding: 5px 15px;
+    cursor: pointer;
 }
 
-#radiobtn {
-    display: inline-flex;
-    gap: 10px;
+.main-categories a:hover {
+    background: #f8f9fa;
+    border-radius: 5px;
 }
 
-.input-group {
-    width: 100%;
+
+/* Subcategory Box */
+
+.subcategory-container {
+    width: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.subcategory-container a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.subcategory-container a:hover {
+    background: #e9ecef;
+    border-radius: 5px;
 }

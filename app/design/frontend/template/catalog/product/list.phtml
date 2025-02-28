@@ -1,3 +1,54 @@
-<h1>
-    Product List phtml
-</h1>
+<?php $products = $this->getProductData(); ?>
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-md-3">
+            <div class="filter-container">
+                <h4>Filters</h4>
+
+                <!-- Price Range -->
+                <h5>Price Range</h5>
+                <div class="price-range-container">
+                    <div class="price-inputs">
+                        <div class="price-input-group">
+                            <label for="minPrice">Min ₹</label>
+                            <input type="number" id="minPrice" class="price-input" value="0" min="0">
+                        </div>
+                        <div class="price-input-group">
+                            <label for="maxPrice">Max ₹</label>
+                            <input type="number" id="maxPrice" class="price-input" value="100000" min="0">
+                        </div>
+                    </div>
+
+                    <button class="filter-btn" id="applyFilter">Apply Filter</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Listing -->
+        <div class="col-md-9">
+            <h3>Products</h3>
+            <div class="row" id="productContainer">
+                <?php foreach ($products as $product): ?>
+                <div class="col-md-4 mb-4 product-card" data-price="<?= $product->getPrice(); ?>">
+                    <div class="card">
+                        <img src="http://localhost/mvcproject/<?= $product->getFilePath(); ?>" class="card-img-top" alt="<?= $product->getName(); ?>">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <?= substr($product->getName(), 0, 25); ?>
+                            </h5>
+                            <p class="card-text">
+                                <?= substr($product->getDescription(), 0, 50); ?>...</p>
+                            <p class="text-primary fw-bold">₹
+                                <?= $product->getPrice(); ?>
+                            </p>
+                            <a href="<?= $this->getUrl('*/*/view').'/?product_id='.$product->getProductId(); ?>" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>

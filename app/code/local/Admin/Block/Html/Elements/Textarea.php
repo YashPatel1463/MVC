@@ -16,7 +16,14 @@ class Admin_Block_Html_Elements_Textarea {
         if(isset($this->_data['class'])) {
             $html .= sprintf(" class='%s'",$this->_data['class']);
         }
-        $html .= "></textarea>";
+        if(isset($this->_data['name'])) {
+            $html .= sprintf(" name='%s'",$this->_data['name']);
+        }
+        $html .= ">";
+        if(isset($this->_data['value'])) {
+            $html .= sprintf("%s",$this->_data['value']);
+        }
+        $html .= "</textarea>";
         return $html;
     }
 }

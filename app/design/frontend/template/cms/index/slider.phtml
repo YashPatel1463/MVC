@@ -1,0 +1,73 @@
+<?php
+    $data = $this->getProductData();
+?>
+
+    <!-- <div id="bannerCarousel" class="carousel slide" data-bs-ride="carousel"> -->
+    <!-- Swiper Banner Slider -->
+    <div class="swiper bannerSwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <img src="http://localhost/mvcproject/Media/Banner/banner1.jpg" alt="Banner 1" class="d-block w-100">
+                <!-- <div class="banner-caption">
+                    <h2>Slide 1 Title</h2>
+                    <p>Short description for Slide 1.</p>
+                </div> -->
+            </div>
+            <div class="swiper-slide">
+                <img src="http://localhost/mvcproject/Media/Banner/banner2.jpg" alt="Banner 2" class="d-block w-100">
+                <!-- <div class="banner-caption">
+                    <h2>Slide 2 Title</h2>
+                    <p>Short description for Slide 2.</p>
+                </div> -->
+            </div>
+            <div class="swiper-slide">
+                <img src="http://localhost/mvcproject/Media/Banner/banner3.jpg" alt="Banner 3" class="d-block w-100">
+                <!-- <div class="banner-caption">
+                    <h2>Slide 3 Title</h2>
+                    <p>Short description for Slide 3.</p>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- Swiper Controls -->
+        <!-- <div class="swiper-pagination"></div> -->
+        <div class="swiper-button-next me-5"></div>
+        <div class="swiper-button-prev ms-5"></div>
+    </div>
+
+    <br><br>
+    <h3 class="text-center"> Best Products </h3>
+    <!-- Product Slider -->
+    <div class="swiper mySwiper mb-2 mx-4">
+        <div class="swiper-wrapper">
+            <?php foreach ($data as $product): ?>
+            <div class="swiper-slide">
+                <div class="product-container card">
+                    <div class="image-container">
+                        <?php if ($product->getFilePath()): ?>
+                        <img src="http://localhost/mvcproject/<?= $product->getFilePath() ?>" alt="<?= $product->getName() ?>">
+                        <?php else: ?>
+                        <div class="placeholder"></div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="product-info h-100">
+                        <div class="card-title">
+                            <h5>
+                                <?= $product->getName(); ?>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Price:</strong>
+                                <?= $product->getPrice() ?>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <!-- <div class="swiper-pagination"></div> -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>

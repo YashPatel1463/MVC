@@ -4,7 +4,7 @@ class Core_Model_DB_Adapter
 {
     protected $_config = [
         "hostname" => "localhost",
-        "dbname" => "ccc",
+        "dbname" => "ccc2",
         "username" => "root",
         "password" => ""
     ];
