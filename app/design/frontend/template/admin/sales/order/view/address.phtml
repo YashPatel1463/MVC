@@ -1,0 +1,64 @@
+<?php
+$billing = $this->getBillingAddress();
+$shipping = $this->getShippingAddress();
+?>
+
+    <div class="order-addresses-container">
+        <div class="address-block billing-address">
+            <h3>Billing Address</h3>
+            <div class="address-content">
+                <div class="address-name">
+                    <span id="billing_firstname"><?= $billing->getFirstname(); ?></span> <span id="billing_lastname"><?= $billing->getLastname(); ?></span>
+                </div>
+                <div class="address-phone" id="billing_phone">
+                    <?= $billing->getPhone(); ?>
+                </div>
+                <div class="address-street" id="billing_street_address">
+                    <?= $billing->getStreetAddress(); ?>
+                </div>
+                <div class="address-city-region">
+                    <span id="billing_city"><?= $billing->getCity(); ?></span>,
+                    <span id="billing_region"><?= $billing->getRegion(); ?></span>
+                </div>
+                <div class="address-country" id="billing_country">
+                    <?= $billing->getCountry(); ?>
+                </div>
+                <div class="address-zipcode" id="billing_zipcode">
+                    <?= $billing->getZipcode(); ?>
+                </div>
+                <div class="address-type">Billing Address</div>
+                <div class="address-meta">
+                    <div class="address-created">Added on: <span id="billing_created_at"><?php echo Date("F j, Y", strtotime($billing->getCreatedAt())); ?></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="address-block shipping-address">
+            <h3>Shipping Address</h3>
+            <div class="address-content">
+                <div class="address-name">
+                    <span id="shipping_firstname"><?= $shipping->getFirstname(); ?></span> <span id="shipping_lastname"><?= $shipping->getLastname(); ?></span>
+                </div>
+                <div class="address-phone" id="shipping_phone">
+                    <?= $shipping->getPhone(); ?>
+                </div>
+                <div class="address-street" id="shipping_street_address">
+                    <?= $shipping->getStreetAddress(); ?>
+                </div>
+                <div class="address-city-region">
+                    <span id="shipping_city"><?= $shipping->getCity(); ?></span>,
+                    <span id="shipping_region"><?= $shipping->getRegion(); ?></span>
+                </div>
+                <div class="address-country" id="shipping_country">
+                    <?= $shipping->getCountry(); ?>
+                </div>
+                <div class="address-zipcode" id="shipping_zipcode">
+                    <?= $shipping->getZipcode(); ?>
+                </div>
+                <div class="address-type">Shipping Address</div>
+                <div class="address-meta">
+                    <div class="address-created">Added on: <span id="shipping_created_at"><?php echo Date("F j, Y", strtotime($shipping->getCreatedAt())); ?></span></div>
+                </div>
+            </div>
+        </div>
+    </div>

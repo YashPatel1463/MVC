@@ -1,0 +1,29 @@
+<?php $products = $this->getProductsData();
+    //print_r($products);
+    //die();
+?>
+
+<hr>
+<div class="col-md-12 p-3">
+    <div class="row" id="productContainer">
+        <?php foreach ($products as $product): ?>
+        <div class="col-md-3 mb-4 product-card card-height" data-price="<?= $product->getPrice(); ?>">
+            <div class="card">
+                <div class="img-box">
+                    <img src="http://localhost/mvcproject/<?= $product->getFilePath(); ?>" class="img-set" alt="<?= $product->getName(); ?>">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <?= substr($product->getName(), 0, 25); ?>
+                    </h5>
+
+                    <p class="text-primary fw-bold">₹
+                        <?= $product->getPrice(); ?>
+                    </p>
+                    <a href="<?= $this->getUrl('catalog/product/view').'/?product_id='.$product->getProductId(); ?>" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>

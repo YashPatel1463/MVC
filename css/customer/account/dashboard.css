@@ -1,0 +1,215 @@
+.custom-card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.custom-card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.custom-card .card-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+
+/* Profile Card Styling */
+
+.profile-card {
+    background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+}
+
+.avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.avatar-wrapper img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.customer-info p {
+    font-size: 0.9rem;
+}
+
+.logout-btn {
+    border-radius: 30px;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2);
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+    transform: translateY(-2px);
+}
+
+
+/* Info Boxes */
+
+.info-box {
+    padding: 12px 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    height: 100%;
+}
+
+.info-box h6 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-box p {
+    font-size: 1rem;
+    color: #333;
+}
+
+
+/* Address Card Styling */
+
+.address-card {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.address-card:hover {
+    border-color: #007bff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.address-header {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.default-badge {
+    font-weight: 400;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+}
+
+.address-actions {
+    padding: 12px;
+}
+
+
+/* Orders Table */
+
+.orders-table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.orders-table td {
+    vertical-align: middle;
+    padding: 0.75rem 1rem;
+}
+
+.status-delivered {
+    font-weight: normal;
+    padding: 0.25rem 0.6rem;
+}
+
+.status-shipped {
+    font-weight: normal;
+    padding: 0.25rem 0.6rem;
+}
+
+.view-order {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.view-order:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+
+/* General badge styling */
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25em 0.6em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    color: white;
+}
+
+
+/* Status-specific colors */
+
+.status-delivered {
+    background-color: #28a745;
+    /* Green */
+}
+
+.status-processing {
+    background-color: #007bff;
+    /* Blue */
+}
+
+.status-pending {
+    background-color: #ffc107;
+    /* Yellow */
+    color: #212529;
+    /* Dark text for better contrast on yellow */
+}
+
+.status-cancelled {
+    background-color: #dc3545;
+    /* Red */
+}
+
+.status-shipped {
+    background-color: #17a2b8;
+    /* Cyan */
+}
+
+
+/* Default fallback */
+
+.status-default {
+    background-color: #6c757d;
+    /* Gray */
+}
+
+
+/* Media Queries */
+
+@media (max-width: 992px) {
+    .address-actions .btn-group {
+        flex-wrap: wrap;
+    }
+    .address-actions .btn {
+        margin-bottom: 5px;
+        flex: 1 0 auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 10px;
+    }
+    .card-header .btn {
+        align-self: flex-start;
+    }
+}

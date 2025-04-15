@@ -1,0 +1,14 @@
+<h3>Ticket Form</h3>
+
+<div class="form-container">
+    <form id="ticketForm" action="<?php echo $this->getUrl('*/*/save'); ?>" method="post">
+        <div>
+            <label for="ticketTitle">Ticket Title:</label>
+            <input type="text" id="ticketTitle" name="ticket[title]" placeholder="Enter ticket title...">
+        </div>
+        <div class="form-buttons">
+            <a href="<?php echo $this->getUrl('*/*/list'); ?>"><button class="btn btn-danger">cancel</button></a>
+            <button type="submit">Save Ticket</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,8 @@
+<?php //echo implode(' ', $this->getType()['class']); 
+?>
+<a href="<?php echo $this->getUrl('*/*/' . $this->getType()['action']) . '/?'. $this->getType()['param'] .'=' . $this->getType()['id']; ?>" class="<?php echo implode(' ', $this->getType()['class']); ?>" 
+    <?php if ($this->getType()['action'] == 'delete'): ?>
+    onclick="return confirm('Are you sure you want to delete this record?');"
+    <?php endif; ?>>
+    <?= $this->getType()['lable']; ?>
+</a>

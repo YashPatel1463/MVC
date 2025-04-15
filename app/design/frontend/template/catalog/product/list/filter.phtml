@@ -1,0 +1,39 @@
+<?php $filters = $this->getAttributesData(); ?>
+<div class="col-md-3">
+    <div class="filter-container">
+        <h4>Filters</h4>
+
+        <!-- Price Range -->
+        <div class="price-range-container">
+            <h5>Price Range</h5>
+            <div class="price-inputs">
+                <div class="price-input-group">
+                    <label for="minPrice">Min ₹</label>
+                    <input type="number" id="minPrice" class="price-input" value="0" min="0">
+                </div>
+                <div class="price-input-group">
+                    <label for="maxPrice">Max ₹</label>
+                    <input type="number" id="maxPrice" class="price-input" value="1000" min="0">
+                </div>
+            </div>
+        </div>
+
+        <!-- <h5>Manufacturer</h5> -->
+        <div class="filter-option">
+            <?php foreach ($filters as $name => $values): ?>
+            <h5>
+                <?= ucwords(htmlspecialchars($name)) ?>
+            </h5>
+            <?php foreach ($values as $index => $value): ?>
+            <input type="checkbox" id="<?= $value .'_'. $index ?>" name="<?= $name ?>" value="<?= htmlspecialchars($value) ?>" class="filter-checkbox">
+            <label for="<?= $value .'_'. $index ?>"><?= ucfirst(htmlspecialchars($value)) ?></label><br>
+            <?php endforeach; ?>
+            <hr>
+            <?php endforeach; ?>
+        </div>
+
+
+        <button class="filter-btn" id="clearFilter">Clear Filter</button>
+        <button class="filter-btn" id="applyFilter">Apply Filter</button>
+    </div>
+</div>

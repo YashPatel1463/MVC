@@ -1,0 +1,40 @@
+<?php $info = $this->getOrdersDetail(); ?>
+
+<div class="order-info-container">
+    <h2>Order Information</h2>
+    <div class="order-details">
+        <div class="order-detail-item">
+            <span class="detail-label">Order Number:</span>
+            <span class="detail-value" id="order_no"><?= $info->getOrderNo() ?></span>
+        </div>
+        <div class="order-detail-item">
+            <span class="detail-label">Date Placed:</span>
+            <span class="detail-value" id="order_date"><?= $info->getCreatedAt() ?></span>
+        </div>
+        <div class="order-detail-item">
+            <span class="detail-label">Customer Email:</span>
+            <span class="detail-value" id="customer_email"><?= $info->getCustomerEmail() ?></span>
+        </div>
+        <div class="order-detail-item">
+            <span class="detail-label">Shipping Method:</span>
+            <span class="detail-value" id="shipping_method"><?= $info->getShippingMethod() ?></span>
+        </div>
+        <!-- <div class="order-detail-item">
+            <span class="detail-label">Estimated Delivery:</span>
+            <span class="detail-value" id="estimated_delivery">March 21, 2025</span>
+        </div> -->
+        <div class="order-detail-item">
+            <span class="detail-label">Payment Method:</span>
+            <span class="detail-value" id="payment_method"><?= $info->getPaymentMethod() ?></span>
+        </div>
+        <div class="order-detail-item">
+            <span class="detail-label">Order Status:</span>
+            <span class="detail-value status-processing" id="order_status"><?= $info->getOrdreStatus() ?></span>
+        </div>
+    </div>
+    <!-- <div class="order-actions">
+        <a href="#" class="btn btn-primary" id="track_order">Track Order</a>
+        <a href="#" class="btn btn-secondary" id="download_invoice">Download Invoice</a>
+        <a href="#" class="btn btn-outline" id="contact_support">Contact Support</a>
+    </div> -->
+</div>

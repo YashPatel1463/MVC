@@ -1,0 +1,143 @@
+/* Order Items Table CSS */
+
+.order-items-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.order-items-container h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #333333;
+}
+
+.order-items-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.order-items-table thead {
+    background-color: #f5f7fa;
+}
+
+.order-items-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: #555555;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.order-items-table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.order-items-table tbody tr:last-child {
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.order-items-table td {
+    padding: 15px;
+    vertical-align: middle;
+}
+
+.product-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image img {
+    max-width: 100%;
+    display: block;
+}
+
+.product-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.product-id {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.item-price,
+.item-quantity,
+.item-subtotal {
+    font-size: 15px;
+    color: #333333;
+}
+
+.item-price,
+.item-subtotal {
+    font-weight: 500;
+}
+
+
+/* Column widths */
+
+.item-image {
+    width: 100px;
+}
+
+.item-details {
+    width: 40%;
+}
+
+.item-price,
+.item-quantity {
+    width: 15%;
+}
+
+.item-subtotal {
+    width: 15%;
+}
+
+
+/* Footer styles */
+
+tfoot {
+    background-color: #f9fafb;
+}
+
+.order-total .total-label {
+    text-align: right;
+    font-weight: 600;
+    font-size: 16px;
+    color: #333333;
+    padding: 15px;
+}
+
+.order-total .total-value {
+    font-weight: 700;
+    font-size: 18px;
+    color: #333333;
+    padding: 15px;
+}
+
+
+/* Responsive styles */
+
+@media (max-width: 768px) {
+    .order-items-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .item-details {
+        min-width: 180px;
+    }
+}

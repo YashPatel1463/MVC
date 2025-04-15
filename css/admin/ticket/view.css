@@ -1,0 +1,21 @@
+/* table {
+    border: 2px solid black;
+    border-collapse: collapse;
+} */
+
+td,
+tr,
+th {
+    padding: 8px;
+    vertical-align: top;
+    min-width: 150px;
+    border: 1px solid #000000;
+}
+
+.control-panel {
+    margin-bottom: 15px;
+}
+
+.add-btn {
+    margin-top: 5px;
+}

@@ -1,0 +1,219 @@
+<?php
+$rootQuestion = $this->getTicket(); 
+$commentTree = $this->buildCommentTree();
+Mage::log($commentTree);
+?>
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <title>Dynamic Comment Tree</title>
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            td,
+            th {
+                border: 1px solid #999;
+                padding: 8px;
+                text-align: left;
+                vertical-align: top;
+            }
+            
+            .add-btn {
+                margin-top: 5px;
+            }
+            
+            .comment-input {
+                margin-bottom: 5px;
+                display: block;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <form id="commentForm">
+            <table id="commentTable">
+                <thead>
+                    <tr>
+                        <th>Root</th>
+                    </tr>
+                </thead>
+                <tbody id="commentTableBody"></tbody>
+            </table>
+
+            <br>
+            <button type="submit">Save All</button>
+        </form>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            const ROOT_TICKET_ID = <?php echo json_encode($rootQuestion->getTicketId()) ?>;
+            const commentTree = <?= json_encode($commentTree) ?>;
+        </script>
+
+        <script>
+            let maxCol = 1;
+
+            function flattenComments(tree, parentPath = [], rows = []) {
+                tree.forEach(node => {
+                    const currentPath = [...parentPath, node.comment];
+
+                    if (!node.children || node.children.length === 0) {
+                        // Only push full leaf paths
+                        rows.push({
+                            path: currentPath,
+                            id: node.id,
+                            children: [] // no children
+                        });
+                    } else {
+                        flattenComments(node.children, currentPath, rows);
+                    }
+                });
+
+                return rows;
+            }
+
+            function renderFlattenedTable(flattenedRows, rootQuestion) {
+                const maxDepth = Math.max(...flattenedRows.map(r => r.path.length));
+                maxCol = maxDepth + 2;
+
+                const thead = $('#commentTable thead tr');
+                thead.empty().append('<th>Root</th>');
+                for (let i = 0; i < maxDepth; i++) {
+                    thead.append(`<th>Level ${i + 1}</th>`);
+                }
+                thead.append('<th>Add</th>');
+
+                const tbody = $('#commentTableBody');
+                tbody.empty();
+
+                const rootRowSpan = flattenedRows.length || 1;
+                let isFirstRow = true;
+                let previousPath = [];
+
+                flattenedRows.forEach(row => {
+                    const tr = $('<tr></tr>').attr('data-id', row.id);
+
+                    // Add root column with rowspan
+                    if (isFirstRow) {
+                        const rootTd = $('<td></td>')
+                            .attr('rowspan', rootRowSpan)
+                            .text(rootQuestion.getTitle());
+                        tr.append(rootTd);
+                        isFirstRow = false;
+                    }
+
+                    // Compare with previous row to avoid repeating values
+                    for (let i = 0; i < maxDepth; i++) {
+                        const currentVal = row.path[i] || '';
+                        const prevVal = previousPath[i] || '';
+
+                        if (currentVal && currentVal !== prevVal) {
+                            tr.append(`<td>${currentVal}</td>`);
+                        } else {
+                            tr.append(`<td></td>`);
+                        }
+                    }
+
+                    previousPath = row.path;
+
+                    const addTd = $('<td></td>');
+                    addTd.append(`<input type="hidden" class="parent-id" value="${row.id}">`);
+                    addTd.append('<button type="button" class="add-btn">[ + ]</button>');
+                    tr.append(addTd);
+
+                    tbody.append(tr);
+                });
+            }
+
+            $(document).ready(function() {
+                const flattenedRows = flattenComments(commentTree);
+                renderFlattenedTable(flattenedRows, {
+                    getTitle: () => '<?= htmlspecialchars($rootQuestion->getTitle()) ?>'
+                });
+            });
+
+            $(document).on('click', '.add-btn', function() {
+                const currentTd = $(this).closest('td');
+                const currentTr = $(this).closest('tr');
+                const parentId = currentTr.data('id');
+
+                const currentColIndex = currentTd.index();
+                const nextColIndex = currentColIndex - 1;
+
+                maxCol = Math.max(maxCol, nextColIndex + 2); // +2 because Add button is included
+
+                // Ensure table header has enough columns
+                const thCount = $('#commentTable thead th').length;
+                if (maxCol > thCount) {
+                    $('#commentTable thead tr').find('th').eq(thCount - 1).before(`<th>Level ${thCount - 1}</th>`);
+                }
+
+                // Check or create target td
+                let targetTd = currentTr.find('td').eq(nextColIndex);
+                if (targetTd.length === 0) {
+                    targetTd = $('<td></td>');
+                    currentTr.find('td').last().before(targetTd); // insert before [ + ] td
+                }
+
+                const input = $('<input type="text" name="comments[]">').addClass('comment-input');
+                const hidden = $('<input type="hidden" name="parent_ids[]">').val(parentId);
+                targetTd.empty().append(input).append(hidden);
+            });
+
+            $('#commentForm').on('submit', function(e) {
+                e.preventDefault();
+
+                const data = [];
+
+                $('#commentTable tbody tr').each(function() {
+                    $(this).find('td').each(function() {
+                        const textInputs = $(this).find('input[type="text"]');
+                        const hiddenInputs = $(this).find('input[type="hidden"]');
+
+                        textInputs.each(function(index) {
+                            const commentText = $(this).val().trim();
+                            const parentId = hiddenInputs.eq(index).val();
+
+                            if (commentText !== '') {
+                                data.push({
+                                    comment: commentText,
+                                    parent_id: parentId == ROOT_TICKET_ID ? null : parentId,
+                                    ticket_id: ROOT_TICKET_ID
+                                });
+                            }
+                        });
+                    });
+                });
+
+                const finalPayload = {
+                    comment: data
+                };
+
+                console.log("Submitting:", finalPayload);
+
+                $.ajax({
+                    url: "http://localhost/mvcproject/admin/ticket_index/saveComment",
+                    type: "POST",
+                    data: finalPayload,
+                    success: function(response) {
+                        console.log("Data updated");
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                        alert("Failed to add comment!");
+                    }
+                });
+            });
+        </script>
+
+
+    </body>
+
+    </html>

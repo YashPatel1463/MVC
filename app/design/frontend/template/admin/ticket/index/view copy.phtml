@@ -1,0 +1,170 @@
+<?php
+$rootQuestion = $this->getTicket(); 
+$comments = $this->getComments(); 
+$commentTree = $this->buildCommentTree();
+//Mage::log($rootQuestion);
+//Mage::log($comments);
+
+?>
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <title>Dynamic Comment Tree</title>
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            td,
+            th {
+                border: 1px solid #999;
+                padding: 8px;
+                text-align: left;
+                vertical-align: top;
+            }
+            
+            .add-btn {
+                margin-top: 5px;
+            }
+            
+            .comment-input {
+                margin-bottom: 5px;
+                display: block;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <form id="commentForm">
+            <table id="commentTable">
+                <thead>
+                    <tr>
+                        <th>Root</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-id="<?= $rootQuestion->getTicketId() ?>" data-level="0">
+                        <td>
+                            <?= htmlspecialchars($rootQuestion->getTitle()) ?>
+                                <input type="hidden" class="parent-id" value="<?= $rootQuestion->getTicketId() ?>">
+                                <?php if(empty($comments)): ?>
+                                <button type="button" class="add-btn">Add Comment</button>
+                                <?php endif; ?>
+                        </td>
+                    </tr>
+
+                    <?php foreach ($comments as $comment): ?>
+                    <tr data-id="<?= $comment->getCommentId() ?>" data-level="0">
+                        <td>
+                            <?= htmlspecialchars($comment->getComment()) ?>
+                                <input type="hidden" class="parent-id" value="<?= $comment->getCommentId() ?>">
+                                <button type="button" class="add-btn">Add Comment</button>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <br>
+            <button type="submit">Save All</button>
+        </form>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            const ROOT_TICKET_ID = <?php echo json_encode($rootQuestion->getTicketId()) ?>;
+            const commentTree = <?= json_encode($commentTree) ?>;
+        </script>
+
+        <script>
+            let maxCol = 1; // Start with 1 column
+
+            $(document).on('click', '.add-btn', function() {
+                const currentTd = $(this).closest('td');
+                const currentTr = $(this).closest('tr');
+                const parentId = currentTr.data('id');
+
+                const currentColIndex = currentTd.index();
+                const nextColIndex = currentColIndex + 1;
+                maxCol = Math.max(maxCol, nextColIndex + 1);
+
+                // Check if next column exists
+                let targetTd = currentTr.find('td').eq(nextColIndex);
+
+                // If not exists, create it
+                if (targetTd.length === 0) {
+                    targetTd = $('<td></td>');
+                    currentTr.append(targetTd);
+
+                    const ths = $('#commentTable thead tr').children('th').length;
+                    if (maxCol > ths) {
+                        $('#commentTable thead tr').append('<th>Reply</th>');
+                    }
+                }
+
+                // Now add input inside targetTd (can add multiple vertically)
+                const input = $('<input type="text" name="comments[]">').addClass('comment-input');
+                const hidden = $('<input type="hidden" name="parent_ids[]">').val(parentId);
+                targetTd.append(input).append(hidden);
+            });
+
+
+            $('#commentForm').on('submit', function(e) {
+                e.preventDefault();
+
+                const data = [];
+
+                $('#commentTable tbody tr').each(function() {
+                    const rowId = $(this).data('id'); // current row's ID (root or comment)
+
+                    $(this).find('td').each(function() {
+                        const textInputs = $(this).find('input[type="text"]');
+                        const hiddenInputs = $(this).find('input[type="hidden"]');
+
+                        textInputs.each(function(index) {
+                            const commentText = $(this).val().trim();
+                            const parentId = hiddenInputs.eq(index).val();
+
+                            if (commentText !== '') {
+                                data.push({
+                                    comment: commentText,
+                                    parent_id: parentId == ROOT_TICKET_ID ? null : parentId,
+                                    ticket_id: ROOT_TICKET_ID
+                                });
+                            }
+                        });
+                    });
+                });
+
+                const finalPayload = {
+                    comment: data
+                };
+
+                console.log("Submitting:", finalPayload);
+
+                $.ajax({
+                    url: "http://localhost/mvcproject/admin/ticket_index/saveComment",
+                    type: "POST",
+                    data: finalPayload,
+                    success: function(response) {
+                        console.log("data updated");
+                        console.log(response);
+                        location.reload();
+                        // $("#grid-data").html($(response).find("#grid-data").html());
+                        // $("#counts").html($(response).find("#counts").html());
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                        alert("Failed to add comment in table!");
+                    }
+                });
+
+            });
+        </script>
+
+    </body>
+
+    </html>

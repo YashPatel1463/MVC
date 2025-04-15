@@ -1,0 +1,21 @@
+0000000000000000000000000000000000000000 a8909fd1c96675b3f3710922d3192ba92792a72e Yash <patelyash140603@gmail.com> 1740039285 +0530	commit (initial): first commit
+a8909fd1c96675b3f3710922d3192ba92792a72e a8909fd1c96675b3f3710922d3192ba92792a72e Yash <patelyash140603@gmail.com> 1740039345 +0530	checkout: moving from test to main
+a8909fd1c96675b3f3710922d3192ba92792a72e 8062242b1fdbf65a58e512e5c6c8d0c8a59076d9 Yash <patelyash140603@gmail.com> 1740124468 +0530	commit: without js
+8062242b1fdbf65a58e512e5c6c8d0c8a59076d9 0000000000000000000000000000000000000000 Yash <patelyash140603@gmail.com> 1740124538 +0530	Branch: renamed refs/heads/main to refs/heads/main
+8062242b1fdbf65a58e512e5c6c8d0c8a59076d9 8062242b1fdbf65a58e512e5c6c8d0c8a59076d9 Yash <patelyash140603@gmail.com> 1740124538 +0530	Branch: renamed refs/heads/main to refs/heads/main
+8062242b1fdbf65a58e512e5c6c8d0c8a59076d9 80128746b4f7bd8599aa32c80e6e7dc5dde85cb7 Yash <patelyash140603@gmail.com> 1740128587 +0530	commit: with js
+80128746b4f7bd8599aa32c80e6e7dc5dde85cb7 0000000000000000000000000000000000000000 Yash <patelyash140603@gmail.com> 1740128611 +0530	Branch: renamed refs/heads/main to refs/heads/main
+80128746b4f7bd8599aa32c80e6e7dc5dde85cb7 80128746b4f7bd8599aa32c80e6e7dc5dde85cb7 Yash <patelyash140603@gmail.com> 1740128611 +0530	Branch: renamed refs/heads/main to refs/heads/main
+80128746b4f7bd8599aa32c80e6e7dc5dde85cb7 80128746b4f7bd8599aa32c80e6e7dc5dde85cb7 Yash <patelyash140603@gmail.com> 1740741010 +0530	checkout: moving from main to BeforeCart
+80128746b4f7bd8599aa32c80e6e7dc5dde85cb7 f0eaf8cba71d6f68c7ba64970e3b343fd8db6a0b Yash <patelyash140603@gmail.com> 1740741082 +0530	commit: BeforeCart
+f0eaf8cba71d6f68c7ba64970e3b343fd8db6a0b ad1d58290a42c2ebc06b991d3dfa63571909d396 Yash <patelyash140603@gmail.com> 1740741783 +0530	commit: BeforeCart
+ad1d58290a42c2ebc06b991d3dfa63571909d396 ad1d58290a42c2ebc06b991d3dfa63571909d396 Yash <patelyash140603@gmail.com> 1743760721 +0530	checkout: moving from BeforeCart to BeforeCart
+ad1d58290a42c2ebc06b991d3dfa63571909d396 ad1d58290a42c2ebc06b991d3dfa63571909d396 Yash <patelyash140603@gmail.com> 1743760761 +0530	checkout: moving from BeforeCart to almostDone
+ad1d58290a42c2ebc06b991d3dfa63571909d396 0000000000000000000000000000000000000000 Yash <patelyash140603@gmail.com> 1743760815 +0530	Branch: renamed refs/heads/almostDone to refs/heads/afterPayment
+0000000000000000000000000000000000000000 ad1d58290a42c2ebc06b991d3dfa63571909d396 Yash <patelyash140603@gmail.com> 1743760815 +0530	Branch: renamed refs/heads/almostDone to refs/heads/afterPayment
+ad1d58290a42c2ebc06b991d3dfa63571909d396 cd7063ab0e45240fce572693c46b298bb81c2fdb Yash <patelyash140603@gmail.com> 1743760918 +0530	commit: Payment Module done
+cd7063ab0e45240fce572693c46b298bb81c2fdb 3c9d7f883023f3e6866c90be4d8fd7203fb0d7e6 Yash <patelyash140603@gmail.com> 1744129730 +0530	commit: ems module
+3c9d7f883023f3e6866c90be4d8fd7203fb0d7e6 fc4c4b7fdf6e3b5e66212bb792e166b974c78df9 Yash <patelyash140603@gmail.com> 1744129805 +0530	pull origin afterPayment: Merge made by the 'ort' strategy.
+fc4c4b7fdf6e3b5e66212bb792e166b974c78df9 8f95c60bae0dc9908cf53d6966c8e226d78c91d0 Yash <patelyash140603@gmail.com> 1744181488 +0530	commit: exam commit
+8f95c60bae0dc9908cf53d6966c8e226d78c91d0 7f438ff41839cb96a7db5b268ee2f63281a992b4 Yash <patelyash140603@gmail.com> 1744259658 +0530	commit: commit
+7f438ff41839cb96a7db5b268ee2f63281a992b4 016fcb639f9ebeaa8354b100e63e08f39b9e682a Yash <patelyash140603@gmail.com> 1744261159 +0530	commit: commit

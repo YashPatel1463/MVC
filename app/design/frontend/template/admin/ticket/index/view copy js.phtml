@@ -1,0 +1,368 @@
+<?php
+//Mage::log($this->buildCommentTree());
+//Mage::log($this->getComments());
+$root = $this->getTicket()->getTitle();
+$id = $this->getId();
+$comments = $this->getComments();
+//Mage::log($this->buildCounts());
+
+$new = [];
+foreach ($comments as $comment) {
+    array_push($new, $comment->getData());
+}
+
+$commentsJson = json_encode($new); 
+?>
+
+
+    <style>
+        table,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        
+        td {
+            padding: 8px;
+            vertical-align: top;
+            min-width: 150px;
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 6px;
+            margin-top: 5px;
+        }
+        
+        .control-panel {
+            margin-bottom: 15px;
+        }
+    </style>
+
+    <span id="root" class="d-none"><?php echo $root ?></span>
+    <span id="ticketId" class="d-none"><?php echo $id ?></span>
+    <span id="commentsData" class="d-none"><?php echo $commentsJson ?></span>
+
+    <div class="control-panel">
+        <button id="saveAllBtn">Save All</button>
+    </div>
+
+    <table>
+        <thead id="tableHead"></thead>
+        <tbody id="qaBody"></tbody>
+    </table>
+
+    <script>
+        let TreeManager = {
+            nodeId: 0,
+            tree: [],
+            currentInputRow: null,
+            savedLevels: new Set([0]), // Root level (0) is considered saved by default
+            currentActiveLevel: 1, // Tracks the current level that should show "Add Sub" buttons
+
+            createNode(text, nodeId = null, parentId = null) {
+                const id = nodeId || ++this.nodeId;
+                return {
+                    id: parseInt(id),
+                    text: text,
+                    children: [],
+                    level: 0,
+                    parentId: parentId ? parseInt(parentId) : null
+                };
+            },
+
+            addRoot() {
+                const text = $('#root').html().trim();
+                if (!text) return;
+
+                // Create root node with ID 0 (to avoid conflicts with database IDs)
+                const rootNode = this.createNode(text, 0);
+                this.tree = [rootNode]; // Reset the tree array with just the root node
+
+                // If we have existing comments, build the tree
+                this.buildTreeFromComments();
+            },
+
+            buildTreeFromComments() {
+                try {
+                    const commentsDataStr = $('#commentsData').html().trim();
+                    if (!commentsDataStr) return;
+
+                    const comments = JSON.parse(commentsDataStr);
+                    if (!comments || !comments.length) return;
+
+                    console.log("Raw comments data:", comments);
+
+                    // First, create all nodes and store in maps
+                    const nodesMap = new Map(); // Map to store nodes by node_id
+                    const commentIdMap = new Map(); // Map to link comment_id to node objects
+
+                    // Ensure root node is in the map
+                    if (this.tree.length > 0) {
+                        nodesMap.set(this.tree[0].id, this.tree[0]);
+                    }
+
+                    // Create nodes for all comments and add them to maps
+                    comments.forEach(comment => {
+                        // Track the highest node_id for new nodes
+                        this.nodeId = Math.max(this.nodeId, parseInt(comment.node_id));
+
+                        const nodeId = parseInt(comment.node_id);
+                        const commentId = parseInt(comment.comment_id);
+
+                        // Create the node
+                        const node = this.createNode(comment.comment, nodeId, comment.parent_id);
+
+                        // Add to maps
+                        nodesMap.set(nodeId, node);
+                        commentIdMap.set(commentId, node);
+                    });
+
+                    // Now build parent-child relationships
+                    comments.forEach(comment => {
+                        const nodeId = parseInt(comment.node_id);
+                        const node = nodesMap.get(nodeId);
+
+                        if (comment.parent_id) {
+                            // Find the parent node by comment_id
+                            const parentCommentId = parseInt(comment.parent_id);
+                            const parentNode = commentIdMap.get(parentCommentId);
+
+                            if (parentNode) {
+                                // Set the parentId property
+                                node.parentId = parentNode.id;
+
+                                // Add to parent's children if not already there
+                                if (!parentNode.children.some(child => child.id === node.id)) {
+                                    parentNode.children.push(node);
+                                }
+                            } else {
+                                // If parent not found, add to root
+                                node.parentId = this.tree[0].id;
+                                if (!this.tree[0].children.some(child => child.id === node.id)) {
+                                    this.tree[0].children.push(node);
+                                }
+                            }
+                        } else {
+                            // No parent_id means this is a top-level node under root
+                            node.parentId = this.tree[0].id;
+                            if (!this.tree[0].children.some(child => child.id === node.id)) {
+                                this.tree[0].children.push(node);
+                            }
+                        }
+                    });
+
+                    // Calculate levels for all nodes starting from root
+                    this.calculateNodeLevels(this.tree[0], 0);
+
+                    // Set the current active level
+                    const allNodes = this.getAllNodesFlattened();
+                    if (allNodes.length > 0) {
+                        const maxLevel = Math.max(...allNodes.map(node => node.level));
+
+                        // All existing levels are considered "saved"
+                        for (let i = 0; i <= maxLevel; i++) {
+                            this.savedLevels.add(i);
+                        }
+
+                        // Set active level to one more than the maximum existing level
+                        this.currentActiveLevel = maxLevel + 1;
+                    }
+
+                    console.log("Tree built from comments:", this.tree);
+                } catch (error) {
+                    console.error("Error building tree from comments:", error);
+                }
+            },
+
+            calculateNodeLevels(node, level) {
+                node.level = level;
+                node.children.forEach(child => this.calculateNodeLevels(child, level + 1));
+            },
+
+            getMaxDepth(nodes = this.tree, level = 0) {
+                if (!nodes.length) return level;
+                return Math.max(...nodes.map(n => this.getMaxDepth(n.children, level + 1)));
+            },
+
+            countLeafPaths(node) {
+                if (!node.children.length) return 1;
+                return node.children.reduce((sum, child) => sum + this.countLeafPaths(child), 0);
+            },
+
+            getPaths(node, path = [], level = 0) {
+                node.level = level; // Assign the level to each node
+                const newPath = [...path, node];
+                if (!node.children.length) return [newPath];
+                return node.children.flatMap(child => this.getPaths(child, newPath, level + 1));
+            },
+
+            getAllPaths() {
+                return this.tree.flatMap(root => this.getPaths(root, [], 0));
+            },
+
+            render() {
+                const $tbody = $('#qaBody').empty();
+                const $thead = $('#tableHead').empty();
+
+                // Ensure we have a tree to render
+                if (!this.tree.length) {
+                    console.error("No tree to render");
+                    return;
+                }
+
+                const maxDepth = this.getMaxDepth();
+                const $headRow = $('<tr></tr>');
+
+                for (let i = 0; i <= maxDepth; i++) {
+                    $headRow.append(`<th>Level ${i + 1}</th>`);
+                }
+                $thead.append($headRow);
+
+                // Get all possible paths from root to leaf nodes
+                const paths = this.getAllPaths();
+                console.log("Paths to render:", paths);
+
+                if (paths.length === 0) {
+                    console.error("No paths found in tree");
+                    return;
+                }
+
+                const rendered = new Map(); // Track rendered cells to avoid duplicates
+
+                paths.forEach(path => {
+                    const $tr = $('<tr></tr>');
+
+                    for (let colIndex = 0; colIndex <= maxDepth; colIndex++) {
+                        const node = path[colIndex];
+                        const $td = $('<td></td>');
+
+                        if (node) {
+                            const key = `${node.id}-${colIndex}`;
+                            if (!rendered.has(key)) {
+                                const rowspan = this.countLeafPaths(node);
+                                $td.attr('rowspan', rowspan);
+                                $td.html(`<div>${node.text}</div><div class="node-id">ID: ${node.id}</div><br>`);
+
+                                // Only show "Add Sub" button if this is the current active level
+                                if (node.level === this.currentActiveLevel - 1) {
+                                    const $btn = $('<button>Add Sub</button>').on('click', () => {
+                                        this.showNextColumnInput($tr, colIndex + 1, node);
+                                    });
+                                    $td.append($btn);
+                                }
+
+                                rendered.set(key, true);
+                                $tr.append($td);
+                            }
+                        } else {
+                            $tr.append($td);
+                        }
+                    }
+
+                    $tbody.append($tr);
+                });
+            },
+
+            showNextColumnInput($tr, level, parentNode) {
+                if (this.currentInputRow) {
+                    this.currentInputRow.find('.input-container').remove();
+                }
+
+                let $td = $tr.children().eq(level);
+                if (!$td.length) {
+                    $td = $('<td></td>');
+                    $tr.append($td);
+                }
+
+                const $inputWrap = $('<div class="input-container"></div>');
+                const $input = $('<input placeholder="Sub-answer">');
+                const $submitBtn = $('<button>Submit</button>').on('click', () => {
+                    const value = $input.val().trim();
+                    if (value) {
+                        const newNode = this.createNode(value, null, parentNode.id);
+                        newNode.level = level; // Set the level of the new node
+                        parentNode.children.push(newNode);
+                        this.render();
+
+                        // Automatically create another input cell at the same level
+                        this.showNextColumnInput($tr, level, parentNode);
+                    }
+                });
+
+                $inputWrap.append($input, $submitBtn);
+                $td.append($inputWrap);
+                this.currentInputRow = $tr;
+            },
+
+            saveAllCurrentLevelData() {
+                // Find the maximum level that has nodes
+                const allNodes = this.getAllNodesFlattened();
+                const currentMaxLevel = Math.max(...allNodes.map(node => node.level), 0);
+
+                // Mark the level as saved
+                this.savedLevels.add(currentMaxLevel);
+
+                // Set the next level as the active level
+                this.currentActiveLevel = currentMaxLevel + 1;
+
+                // Log the saved level data with parent IDs
+                this.logSavedLevelWithParentIds(currentMaxLevel);
+
+                alert(`Level ${currentMaxLevel + 1} data saved successfully!`);
+                this.render(); // Re-render to update the "Add Sub" buttons
+            },
+
+            logSavedLevelWithParentIds(level) {
+                // Get all nodes at the specified level
+                const allNodes = this.getAllNodesFlattened();
+                const nodesAtLevel = allNodes.filter(node => node.level === level);
+
+                console.log(`=== SAVED DATA FOR LEVEL ${level + 1} ===`);
+
+                nodesAtLevel.forEach(node => {
+                    this.ajaxCall(node.id, node.text, node.parentId);
+                });
+            },
+
+            getAllNodesFlattened(nodes = this.tree) {
+                return nodes.reduce((acc, node) => {
+                    acc.push(node);
+                    if (node.children.length) {
+                        acc = acc.concat(this.getAllNodesFlattened(node.children));
+                    }
+                    return acc;
+                }, []);
+            },
+
+            ajaxCall(nid, cmt, pnid) {
+                let tid = $('#ticketId').html().trim();
+                $.ajax({
+                    url: "http://localhost/mvcproject/admin/ticket_index/saveComment",
+                    type: 'post',
+                    data: {
+                        node_id: nid,
+                        comment: cmt,
+                        parentnode_id: pnid,
+                        ticket_id: tid
+                    },
+                    success: function(res) {
+                        console.log(res);
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    },
+                });
+            }
+        };
+
+        // Bind root add action and save button
+        $(document).ready(function() {
+            TreeManager.addRoot();
+            TreeManager.render();
+
+            $('#saveAllBtn').on('click', function() {
+                TreeManager.saveAllCurrentLevelData();
+            });
+        });
+    </script>

@@ -1,0 +1,47 @@
+<?php
+$maxDepth = $this->maxDepth();
+$rows = $this->getRow();
+?>
+    <div class="container">
+        <div class="control-panel">
+            <a href="<?php echo $this->getUrl('*/*/list'); ?>"><button class="btn btn-primary">Back</button></a>
+            <button id="saveAllBtn" class="btn btn-success">Save All</button>
+        </div>
+
+        <table class="table table-bordered border-dark" id="commentTable">
+            <thead id="tableHead">
+                <th>Root</th>
+                <?php for($i=0; $i<$maxDepth; $i++): ?>
+                <th>level
+                    <?php echo $i+1; ?>
+                </th>
+                <?php endfor; ?>
+            </thead>
+            <tbody id="qaBody">
+                <tr>
+                    <?php foreach($rows as $key => $value): ?>
+                    <?php if($value['rowstart'] == 1): ?>
+                    <tr>
+                        <?php endif; ?>
+
+                        <td rowspan="<?php echo $value['rowspan']; ?>" data-id="<?php echo $key; ?>">
+                            <b><?php echo 'Id:' . $key; ?></b>
+                            <br>
+                            <?php echo $value['comment']; ?>
+                        </td>
+                        <?php if($value['depth'] == $maxDepth): ?>
+                        <td class="addComment">
+                            <button type="submit" class="btn btn-success">Complete</button>
+                            <button type="submit" class="add-btn">Add Comment</button>
+                        </td>
+                        <?php endif; ?>
+                        <?php if($value['rowend'] && $value['depth']< $maxDepth): ?>
+                        <?php echo str_repeat("<td></td>", $maxDepth-$value['depth']+1); ?>
+                        <?php endif; ?>
+                        <?php if($value['rowend'] == 1): ?>
+                    </tr>
+                    <?php endif; ?>
+                    <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>

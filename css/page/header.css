@@ -1,0 +1,217 @@
+/* Header & Navigation Styles - Matching the slider theme */
+
+:root {
+    --primary-color: #333;
+    --accent-color: #886644;
+    --light-color: #f5f5f5;
+    --text-color: #333;
+    --light-accent: #e9e2d9;
+    --border-radius: 0;
+}
+
+
+/* Navbar Styles */
+
+.navbar {
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    background-color: white !important;
+    border-bottom: 1px solid #eee;
+}
+
+.navbar-brand {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: var(--primary-color) !important;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand svg {
+    margin-right: 10px;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: var(--text-color);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link.active {
+    color: var(--accent-color);
+}
+
+.dropdown-toggle::after {
+    vertical-align: middle;
+}
+
+
+/* Search Bar */
+
+.input-group {
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.input-group-text {
+    border: none;
+    background: white;
+    color: #999;
+}
+
+.form-control {
+    border: none;
+    box-shadow: none !important;
+    font-size: 14px;
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+}
+
+
+/* Action Buttons */
+
+.btn-outline-primary,
+.btn-outline-dark {
+    border-color: #ddd;
+    color: var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-dark:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+
+/* Category Menus */
+
+.main-categories-container {
+    background-color: var(--light-accent);
+    padding: 0;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.main-categories {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.main-category {
+    padding: 15px 20px;
+    font-size: 14px;
+    color: var(--primary-color);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.main-category:hover {
+    color: var(--accent-color);
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.subcategory-container {
+    position: absolute;
+    display: none;
+    /* width: 100%; */
+    background-color: #fff9f2;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    /*common*/
+    min-width: 125px;
+    padding: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.subcategory-container a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.subcategory-container a:hover {
+    background: #e9ecef;
+    border-radius: 5px;
+}
+
+#subcategoriesList {
+    /* display: flex; */
+    flex-wrap: wrap;
+    /* padding: 20px; */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.subcategory-group {
+    margin-right: 40px;
+    margin-bottom: 20px;
+    min-width: 200px;
+}
+
+.subcategory-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.subcategory-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.subcategory-links li {
+    margin-bottom: 8px;
+}
+
+.subcategory-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.subcategory-links a:hover {
+    color: var(--accent-color);
+}
+
+
+/* Responsive tweaks */
+
+@media (max-width: 992px) {
+    .navbar-nav {
+        margin-top: 15px;
+    }
+    .main-category {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+}

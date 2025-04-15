@@ -1,0 +1,45 @@
+<div>
+    <?php $this->getChildHtml('toolbar'); ?>
+    <?php $this->getChildHtml('export'); ?>
+    <a href="<?php echo $this->getUrl('*/dashboard/index'); ?>"><button class="btn btn-success">Back</button></a>
+    <a href="<?php echo $this->getUrl('*/*/new'); ?>"><button class="btn btn-success">Add New</button></a>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <form id="filter-form">
+                    <?php foreach ($this->_columns as $column): ?>
+                    <th>
+                        <span><?php echo $column->getData()['lable']; ?></span>
+                        <br>
+                        <span><?php
+                        if($column->getIsFilter()) {
+                            //Mage::log($column->getFilter());
+                            echo $column->getFilter()
+                            ->render(); 
+                        }
+                        ?></span>
+                    </th>
+                    <?php endforeach; ?>
+                    <button class="btn btn-primary" id="filter-btn">Search</button>
+                    <button class="btn btn-primary m-2" id="remove-filter-btn">Clear Filter</button>
+                </form>
+            </tr>
+        </thead>
+        <tbody id="grid-data">
+            <?php foreach ($this->getCollection()->getData() as $data): ?>
+            <tr>
+                <?php foreach ($this->getColumns() as $column): ?>
+                <?php //Mage::log($column); ?>
+                <td>
+                    <?php $column->setRow($data);
+                        echo $column->render(); ?>
+                </td>
+                <?php endforeach; ?>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,74 @@
+<!-- Right Column: Order Summary -->
+<div class="order-summary">
+    <h3 class="section-title">Order Summary</h3>
+
+    <!-- Cart Items -->
+    <div class="summary-items">
+        <?php foreach ($data as $_data): ?>
+        <div class="summary-item">
+            <div class="item-image">
+                <img src="<?php echo Mage::getBaseUrl() . $_data->getProduct()->getDefaultImage(); ?>" alt="<?php echo $_data->getProduct()->getName(); ?>">
+                <span class="item-qty"><?= $_data->getProductQuantity() ?></span>
+            </div>
+            <div class="item-details">
+                <h4>
+                    <?php echo $_data->getProduct()->getName(); ?>
+                </h4>
+                <p class="item-sku">SKU:
+                    <?php echo $_data->getProduct()->getSku(); ?>
+                </p>
+            </div>
+            <div class="item-price">
+                <?php echo $_data->getSubTotal(); ?>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+
+    <!-- Coupon Code -->
+    <div class="coupon-section">
+        <form action="<?php echo $this->getUrl('*/cart/applyCoupon'); ?>" method="post">
+            <div class="coupon-input-group">
+                <input type="text" id="coupon_code" name="coupon[coupon_code]" value="<?php echo $totalamount->getCouponCode()?>" placeholder="Enter coupon code">
+                <input type="hidden" name="coupon[subTotal]" value="<?php echo $this->getTotalAmount(); ?>">
+                <?php if ($totalamount->getCouponCode() == ""): ?>
+                <button class="apply-btn" name="coupon[type]" value="apply">Apply</button>
+                <?php else: ?>
+                <button class="remove-coupon-btn" name="coupon[type]" value="remove">Remove</button>
+                <?php endif; ?>
+            </div>
+        </form>
+    </div>
+
+    <!-- Order Totals -->
+    <div class="order-totals">
+        <div class="total-row">
+            <span>Subtotal:</span>
+            <span class="amount"><?php echo $this->getTotalAmount(); ?></span>
+        </div>
+        <div class="total-row">
+            <span>Discount:</span>
+            <span class="amount discount-amount"><?php echo $totalamount->getCouponDiscount() ?? '0.00'; ?></span>
+        </div>
+        <div class="total-row">
+            <span>Tax:</span>
+            <span class="amount"><?php echo $totalamount->getTaxAmount() ?? '0.00'; ?></span>
+        </div>
+        <div class="total-row">
+            <span>Shipping:</span>
+            <span class="amount" id="shipping-cost">$5.99</span>
+        </div>
+        <div class="total-row grand-total">
+            <span>Total:</span>
+            <span class="amount"><?php echo $totalamount->getTotalAmount(); ?></span>
+        </div>
+    </div>
+
+    <!-- Place Order Button -->
+    <button class="place-order-btn">Place Order</button>
+
+    <!-- Security Info -->
+    <div class="security-info">
+        <p><i class="fa fa-lock"></i> Secure checkout - Your personal and payment information is secure</p>
+    </div>
+</div>

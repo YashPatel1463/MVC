@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Horizontal Tree Question System</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        td,
+        th {
+            border: 1px solid #999;
+            padding: 8px;
+            vertical-align: top;
+        }
+        
+        .fade-out {
+            opacity: 0.3;
+        }
+        
+        .strike {
+            text-decoration: line-through;
+        }
+        
+        .node-content {
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f9f9f9;
+            margin-bottom: 4px;
+        }
+        
+        .node-actions {
+            margin-top: 4px;
+        }
+        
+        .indent-line {
+            border-left: 2px solid #ccc;
+            margin-left: 5px;
+            padding-left: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Horizontal Tree Question System</h2>
+    <input type="text" id="newRoot" placeholder="Enter main question">
+    <button onclick="addRootQuestion()">Add Question</button>
+    <button onclick="saveTree()">Save Tree</button>
+    <button onclick="loadTree()">Load Tree</button>
+    <button onclick="exportTree()">Export Tree</button>
+    <input type="file" id="importFile" onchange="importTree(event)">
+    <br><br>
+    <table id="questionTable">
+        <thead>
+            <tr id="tableHeaders"></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        let questionId = 0;
+        let tree = [];
+
+        function addRootQuestion() {
+            const text = $('#newRoot').val().trim();
+            if (!text) return;
+            const root = createNode(text);
+            tree.push(root);
+            $('#newRoot').val('');
+            render();
+        }
+
+        function createNode(text) {
+            return {
+                id: ++questionId,
+                text,
+                completed: false,
+                children: []
+            };
+        }
+
+        function render() {
+            const tbody = $('#questionTable tbody');
+            const thead = $('#tableHeaders');
+            tbody.empty();
+            thead.empty();
+
+            const maxDepth = getMaxDepth(tree);
+            for (let i = 0; i < maxDepth; i++) {
+                thead.append(`<th>Level ${i + 1}</th>`);
+            }
+
+            const rows = [];
+            tree.forEach(root => buildRowsRecursive(root, [], rows));
+
+            const renderedCells = new Map();
+
+            rows.forEach(path => {
+                const row = $('<tr></tr>');
+                path.forEach((node, colIndex) => {
+                    const key = node.id + '-' + colIndex;
+                    if (!renderedCells.has(key)) {
+                        const rowspan = countLeafPaths(node);
+                        const faded = isBranchComplete(node) ? 'fade-out' : '';
+                        const striked = node.completed ? 'strike' : '';
+                        const td = $('<td></td>').attr('rowspan', rowspan);
+                        const wrapper = $('<div class="node-content"></div>').addClass(`${faded} ${striked}`);
+                        wrapper.append(`<div>${node.text}</div>`);
+
+                        const actions = $('<div class="node-actions"></div>');
+                        const subBtn = $('<button>Add Sub</button>').click(() => addSub(node.id));
+                        actions.append(subBtn);
+                        if (!node.completed && node.children.length === 0) {
+                            const compBtn = $('<button>Complete</button>').click(() => complete(node.id));
+                            actions.append(' ');
+                            actions.append(compBtn);
+                        }
+                        wrapper.append(actions);
+                        td.append(wrapper);
+                        row.append(td);
+                        renderedCells.set(key, true);
+                    }
+                });
+                tbody.append(row);
+            });
+        }
+
+        function buildRowsRecursive(node, path, rows) {
+            const newPath = [...path, node];
+            if (node.children.length === 0) {
+                rows.push(newPath);
+            } else {
+                node.children.forEach(child => {
+                    buildRowsRecursive(child, newPath, rows);
+                });
+            }
+        }
+
+        function countLeafPaths(node) {
+            if (node.children.length === 0) return 1;
+            return node.children.map(countLeafPaths).reduce((a, b) => a + b, 0);
+        }
+
+        function getMaxDepth(nodes, level = 1) {
+            let max = level;
+            nodes.forEach(n => {
+                if (n.children.length > 0) {
+                    max = Math.max(max, getMaxDepth(n.children, level + 1));
+                }
+            });
+            return max;
+        }
+
+        function findNode(id, nodes = tree) {
+            for (let node of nodes) {
+                if (node.id === id) return node;
+                const found = findNode(id, node.children);
+                if (found) return found;
+            }
+            return null;
+        }
+
+        function addSub(parentId) {
+            const parent = findNode(parentId);
+            if (!parent || parent.completed) return alert("Can't add to completed question");
+            const text = prompt('Enter sub-question:');
+            if (!text) return;
+            parent.children.push(createNode(text));
+            parent.completed = false;
+            render();
+        }
+
+        function complete(id) {
+            const node = findNode(id);
+            if (!node) return;
+            if (node.children.length > 0) return alert("Only leaf nodes can be completed.");
+            node.completed = true;
+            render();
+        }
+
+        function isBranchComplete(node) {
+            if (node.children.length === 0) return node.completed;
+            return node.children.every(child => isBranchComplete(child));
+        }
+
+        function saveTree() {
+            localStorage.setItem('questionTree', JSON.stringify({
+                tree,
+                questionId
+            }));
+            alert("Tree saved to localStorage.");
+        }
+
+        function loadTree() {
+            const data = localStorage.getItem('questionTree');
+            if (!data) return alert("No saved data.");
+            const parsed = JSON.parse(data);
+            tree = parsed.tree || [];
+            questionId = parsed.questionId || 0;
+            render();
+        }
+
+        function exportTree() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
+                tree,
+                questionId
+            }, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "question_tree.json");
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        function importTree(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    tree = data.tree || [];
+                    questionId = data.questionId || 0;
+                    render();
+                } catch (err) {
+                    alert("Invalid file format");
+                }
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+
+</html>

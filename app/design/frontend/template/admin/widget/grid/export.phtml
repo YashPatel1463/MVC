@@ -1,0 +1,13 @@
+<?php
+$queryParams = $_GET;
+unset($queryParams['export']);
+$baseQuery = http_build_query($queryParams);
+$baseUrl = !empty($baseQuery) ? "?" . $baseQuery . "&" : "?";
+?>
+
+    <a class="btn btn-success m-2" href="<?php echo $baseUrl .'export=true' ?>">Export Data</a>
+
+    <form action="<?= $this->getUrl('*/*/import') ?>" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <button type="submit" class="btn btn-success m-2" name="importSubmit" value="import">Import Data</button>
+    </form>

@@ -1,0 +1,155 @@
+<style>
+    table,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    
+    td {
+        padding: 8px;
+        vertical-align: top;
+        min-width: 150px;
+    }
+    
+    input {
+        width: 100px;
+    }
+</style>
+
+
+<h3>Q&A Table</h3>
+<table id="qaTable">
+    <thead id="tableHead"></thead>
+    <tbody id="qaBody"></tbody>
+</table>
+
+<button onclick="addRoot()">Add Root Question</button>
+<button onclick="submitAll()">Submit All</button>
+
+<script>
+    let nodeId = 0;
+    let tree = [];
+    let inputMap = {}; // nodeId -> array of inputs
+
+    function createNode(text) {
+        return {
+            id: ++nodeId,
+            text,
+            children: [],
+        };
+    }
+
+    function addRoot() {
+        const text = prompt("Enter root question:");
+        if (!text) return;
+        tree.push(createNode(text));
+        render();
+    }
+
+    function getMaxDepth(nodes, level = 0) {
+        if (nodes.length === 0) return level;
+        return Math.max(...nodes.map(n => getMaxDepth(n.children, level + 1)));
+    }
+
+    function countLeafPaths(node) {
+        if (node.children.length === 0) return 1;
+        return node.children.reduce((sum, child) => sum + countLeafPaths(child), 0);
+    }
+
+    function getPaths(node, path = []) {
+        const newPath = [...path, node];
+        if (node.children.length === 0) return [newPath];
+        return node.children.flatMap(child => getPaths(child, newPath));
+    }
+
+    function getAllPaths() {
+        return tree.flatMap(root => getPaths(root));
+    }
+
+    function render() {
+        const tbody = document.getElementById("qaBody");
+        const thead = document.getElementById("tableHead");
+        tbody.innerHTML = "";
+        thead.innerHTML = "";
+
+        const maxDepth = getMaxDepth(tree);
+        const headRow = document.createElement("tr");
+        for (let i = 0; i <= maxDepth + 3; i++) {
+            const th = document.createElement("th");
+            th.textContent = `Level ${i + 1}`;
+            headRow.appendChild(th);
+        }
+        thead.appendChild(headRow);
+
+        const paths = getAllPaths();
+        const rendered = new Map();
+
+        paths.forEach(path => {
+            const tr = document.createElement("tr");
+
+            path.forEach((node, colIndex) => {
+                const key = node.id + '-' + colIndex;
+                if (!rendered.has(key)) {
+                    const td = document.createElement("td");
+                    td.rowSpan = countLeafPaths(node);
+                    td.innerHTML = `<div>${node.text}</div>`;
+
+                    const addBtn = document.createElement("button");
+                    addBtn.textContent = "Add Sub";
+                    addBtn.onclick = () => addSubInput(node.id, tr, colIndex + 1);
+
+                    td.appendChild(document.createElement("br"));
+                    td.appendChild(addBtn);
+
+                    rendered.set(key, true);
+                    tr.appendChild(td);
+                }
+            });
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    function addSubInput(parentId, rowEl, insertAtColumn) {
+        if (!inputMap[parentId]) inputMap[parentId] = [];
+
+        const input = document.createElement("input");
+        input.placeholder = "Sub-answer";
+
+        inputMap[parentId].push(input);
+
+        // Ensure the row has enough columns
+        while (rowEl.children.length <= insertAtColumn) {
+            const td = document.createElement("td");
+            rowEl.appendChild(td);
+        }
+
+        // Append input to that column
+        rowEl.children[insertAtColumn].appendChild(input);
+    }
+
+    function submitAll() {
+        for (let parentId in inputMap) {
+            const inputs = inputMap[parentId];
+            const parentNode = findNodeById(parseInt(parentId), tree);
+            inputs.forEach(input => {
+                const val = input.value.trim();
+                if (val) parentNode.children.push(createNode(val));
+            });
+        }
+
+        inputMap = {}; // Clear after submitting
+        render();
+    }
+
+    function findNodeById(id, nodes) {
+        for (let node of nodes) {
+            if (node.id === id) return node;
+            const found = findNodeById(id, node.children);
+            if (found) return found;
+        }
+        return null;
+    }
+
+    render();
+</script>

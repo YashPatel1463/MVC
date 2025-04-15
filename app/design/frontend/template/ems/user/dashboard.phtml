@@ -1,0 +1,94 @@
+<div>
+    <?php
+    //  Mage::log($this->getPastEvents()); 
+     Mage::log($this->getUpcomingEvents()); 
+    ?>
+
+    <div>
+        <h1> Past Events </h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Capacity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->getPastEvents() as $event):  ?>
+                    <tr>
+                        <td>
+                            <?= $event->getTitle(); ?>
+                        </td>
+                        <td>
+                            <?= $event->getDescription() ?>
+                        </td>
+                        <td>
+                            <?= $event->getDate() ?>
+                        </td>
+                        <td>
+                            <?= $event->getLocation() ?>
+                        </td>
+                        <td>
+                            <?= $event->getCapacity() ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <div>
+        <h1> Upcoming Events </h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Capacity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->getUpcomingEvents() as $event):  ?>
+                    <tr>
+                        <td>
+                            <?= $event->getTitle(); ?>
+                        </td>
+                        <td>
+                            <?= $event->getDescription() ?>
+                        </td>
+                        <td>
+                            <?= $event->getDate() ?>
+                        </td>
+                        <td>
+                            <?= $event->getLocation() ?>
+                        </td>
+                        <td>
+                            <?= $event->getCapacity() ?>
+                        </td>
+                        <td>
+                            <?php if ($event->getStatus() == null): ?>
+                                <?php if ($event->getCapacity() > $event->getTotal()): ?>
+                                    <?php if($event->isLogin()): ?>
+                                    <a href="<?= $this->getUrl('*/*/register') ?>/?event_id=<?= $event->getEventId(); ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to Register in this Event?');">
+                                        Register
+                                    </a>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <p>All Tickets Sold Out.</p>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <p><?= $event->getStatus(); ?></p>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>

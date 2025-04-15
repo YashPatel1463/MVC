@@ -1,0 +1,21 @@
+<div class="message-container" id="messageContainer">
+    <?php foreach($this->getAllMessages() as $type => $messages): 
+            $function = 'get'.ucfirst($type);
+        ?>
+    <?php foreach($this->$function() as $message): ?>
+    <div class="alert alert-<?= ($type == 'error') ? 'danger' : $type; ?> d-flex align-items-center alert-dismissible fade show" role="alert">
+        <?php if($type == 'success'): ?>
+        <i class="bi bi-check-circle-fill flex-shrink-0"></i>
+        <?php elseif($type == 'warning'): ?>
+        <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+        <?php elseif($type == 'error'): ?>
+        <i class="bi bi-x-circle-fill flex-shrink-0"></i>
+        <?php endif; ?>
+        <div class="alert-content">
+            <?= htmlspecialchars($message); ?>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php endforeach; ?>
+    <?php endforeach; ?>
+</div>

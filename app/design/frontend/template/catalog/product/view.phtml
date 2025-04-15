@@ -1,0 +1,163 @@
+<?php
+$product = $this->getProductData();
+$attributes = $this->getAttributes();
+?>
+
+<div class="product-container">
+    <!-- Left: Image Gallery -->
+    <div class="product-images">
+        <div class="main-image">
+            <img id="mainImage" src="http://localhost/mvcproject/<?= $product->getFilePath()[0]; ?>" alt="Product Image">
+        </div>
+        <div class="thumbnail-container">
+            <?php foreach ($product->getFilePath() as $image): ?>
+                <img class="thumbnail" src="http://localhost/mvcproject/<?= $image; ?>" alt="Thumbnail">
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <!-- Right: Product Details -->
+    <div class="product-details">
+        <h1>
+            <?php echo $product->getName(); ?>
+        </h1>
+        <p class="price">₹
+            <?php echo number_format($product->getPrice(), 2); ?>
+        </p>
+        <p class="description">
+            <?php echo $product->getDescription(); ?>
+        </p>
+
+        <div class="d-flex align-items-center gap-2">
+            <h6 class="m-0">Stock Quantity:</h6>
+            <p class="m-0">
+                <?php echo $product->getStockQuantity(); ?>
+            </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <h6 class="m-0">SKU:</h6>
+            <p class="m-0">
+                <?php echo $product->getSku(); ?>
+            </p>
+        </div>
+
+
+        <!-- Product Attributes -->
+        <div class="product-attributes">
+            <div class="container mt-4">
+                <table class="table table-bordered">
+                    <thead class="table-secondary text-center">
+                        <tr>
+                            <th colspan="2">
+                                <h3 class="m-0">Product Details</h3>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($attributes as $attr):
+                            $fn = $attr->getAttributeCode();
+                            if ($product->$fn):
+                        ?>
+                                <tr>
+                                    <td class="bg-light"><strong><?= $attr->getName() ?></strong></td>
+                                    <td>
+                                        <?php echo $product->$fn; ?>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <form>
+                <input type="hidden" name="cart[product_id]" value="<?php echo $product->getProductId(); ?>">
+                <label>Quantity</label>
+                <input type="number" name="cart[quantity]" value="1">
+                <button class="btn-add-cart">Add to Cart</button>
+            </form>
+            <button class="btn-buy-now">Buy Now</button>
+        </div>
+    </div>
+</div>
+
+<div id="reviews" class="tab-content">
+    <div class="single-product-add-review">
+        <h3 class="single-product-review-title">Write a Review</h3>
+        <form id="review-form" method="post" action="<?php echo $this->getUrl('*/*/addReview'); ?>">
+            <input type="hidden" name="catalog_product_review[product_id]" value="<?php echo $product->getProductId(); ?>">
+
+            <div class="single-product-rating-select">
+                <label for="rating">Your Rating:</label>
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="catalog_product_review[rating]" value="5" required>
+                    <label for="star5">★</label>
+                    <input type="radio" id="star4" name="catalog_product_review[rating]" value="4">
+                    <label for="star4">★</label>
+                    <input type="radio" id="star3" name="catalog_product_review[rating]" value="3">
+                    <label for="star3">★</label>
+                    <input type="radio" id="star2" name="catalog_product_review[rating]" value="2">
+                    <label for="star2">★</label>
+                    <input type="radio" id="star1" name="catalog_product_review[rating]" value="1">
+                    <label for="star1">★</label>
+                </div>
+            </div>
+
+            <!-- <div class="form-group">
+                <label for="reviewer_name">Your Name:</label>
+                <input type="text" id="reviewer_name" name="reviewer_name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="review_title">Review Title:</label>
+                <input type="text" id="review_title" name="review_title" required>
+            </div> -->
+
+            <div class="form-group">
+                <label for="review_content">Your Review:</label>
+                <textarea id="review_content" name="catalog_product_review[review]" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-review-btn">Submit Review</button>
+        </form>
+    </div>
+
+    <?php //Mage::log($this->getReviews()); 
+    ?>
+
+    <?php foreach ($this->getReviews() as $review): ?>
+        <div style="margin-bottom: 30px;">
+            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background-color: #3a7bd5; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; margin-right: 15px;">
+                    <?php echo strtoupper(substr($review->getFname(), 0, 1) . substr($review->getLname(), 0, 1)); ?>
+                </div>
+                <div>
+                    <div style="font-weight: 600;">
+                        <?php echo ucwords($review->getFname() . " " . $review->getLname()); ?>
+                    </div>
+                    <!-- <div style="color: #f9a825; margin: 5px 0;">
+                        <?php echo $review->getRating() ?>
+                    </div> -->
+                    <div style="display: flex;">
+                        <div style="color: #f9a825; margin: 5px 0;">
+                            <?php echo str_repeat('★', $review->getRating()) .  str_repeat('☆', 5-$review->getRating()); ?>
+                        </div>
+                    </div>
+                    
+                    <?php
+                    $date = new DateTime($review->getCreatedAt());
+                    $formatted = $date->format('F d, Y');
+                    ?>
+                    <div style="font-size: 0.8em; color: #777;">Verified Purchase |
+                        <?php echo $formatted ?>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-bottom: 10px;">
+                <?php echo $review->getReview(); ?>
+            </p>
+        </div>
+    <?php endforeach; ?>
+</div>

@@ -1,0 +1,72 @@
+<?php $address = $this->getAddressData(); ?>
+<div class="address-form-container">
+    <h2>Customer Address</h2>
+    <form id="addressForm" class="address-form" action="<?php echo $this->getUrl('*/*/save'); ?>" method="post">
+        <input type="hidden" id="aid" name="customer_address[address_id]" value="<?= $address->getAddressId(); ?>">
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="firstName">First Name*</label>
+                <input type="text" id="firstName" name="customer_address[firstname]" value="<?= $address->getFirstname(); ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name*</label>
+                <input type="text" id="lastName" name="customer_address[lastname]" value="<?= $address->getLastname(); ?>" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number*</label>
+            <input type="tel" id="phone" name="customer_address[phone]" value="<?= $address->getPhone(); ?>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="street1">Street Address*</label>
+            <input type="text" id="street" name="customer_address[street]" placeholder="Street address" value="<?= $address->getStreet(); ?>" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="city">City*</label>
+                <input type="text" id="city" name="customer_address[city]" value="<?= $address->getCity(); ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="state">State/Province*</label>
+                <input type="text" id="state" name="customer_address[state]" value="<?= $address->getState(); ?>" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="country">Country*</label>
+                <select id="country" name="customer_address[country]" required>
+                    <option <?php echo ($address->getCountry() == 'India') ? 'selected' : ''; ?> value="India">India</option>
+                    <option <?php echo ($address->getCountry() == 'USA') ? 'selected' : ''; ?> value="USA">United States</option>
+                    <option <?php echo ($address->getCountry() == 'Canada') ? 'selected' : ''; ?> value="Canada">Canada</option>
+                    <option <?php echo ($address->getCountry() == 'UK') ? 'selected' : ''; ?> value="UK">United Kingdom</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="zipCode">Zip/Postal Code*</label>
+                <input type="text" id="zipCode" name="customer_address[zip_code]" value="<?= $address->getZipCode(); ?>" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="address_type">Address Type *</label>
+                <select id="address_type" name="customer_address[address_type]" required>
+                    <option <?php echo ($address->getAddressType() == 'Home') ? 'selected' : ''; ?> value="home">Home</option>
+                    <option <?php echo ($address->getAddressType() == 'Work') ? 'selected' : ''; ?> value="work">Work</option>
+                    <option <?php echo ($address->getAddressType() == 'Other') ? 'selected' : ''; ?> value="other">Other</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <!-- <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button> -->
+            <button type="submit" class="btn btn-primary" id="saveBtn">Save Address</button>
+        </div>
+    </form>
+</div>

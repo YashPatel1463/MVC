@@ -1,0 +1,145 @@
+<?php $customer = $this->getCustomerData(); ?>
+<div class="registration-container">
+    <h2>Customer Registration</h2>
+    <form id="customerRegistrationForm" action="<?php echo $this->getUrl('*/*/registrationPost'); ?>" method="post">
+
+        <div class="form-section">
+            <h3>Personal Information</h3>
+            <input type="hidden" id="customerId" name="customer[customer_id]" value="<?= $customer->getCustomerId(); ?>">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fname">First Name *</label>
+                    <input type="text" id="fname" name="customer[first_name]" value="<?= $customer->getFirstName(); ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="lname">Last Name *</label>
+                    <input type="text" id="lname" name="customer[last_name]" value="<?= $customer->getLastName(); ?>" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="customer[email]" value="<?= $customer->getEmail(); ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact">Phone Number *</label>
+                    <input type="tel" id="contact" name="customer[phone]" value="<?= $customer->getPhone(); ?>" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="birthdate">Date of Birth</label>
+                    <input type="date" id="birthdate" name="customer[birthdate]" value="<?= $customer->getBirthdate(); ?>">
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" <?php echo ($customer->getGender() == 'male') ? 'checked' : '';  ?> name="customer[gender]" value="male"> Male
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" <?php echo ($customer->getGender() == 'female') ? 'checked' : '';  ?> name="customer[gender]" value="female"> Female
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" <?php echo ($customer->getGender() == 'other') ? 'checked' : '';  ?> name="customer[gender]" value="other"> Other
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <?php if(empty($customer->getCustomerId())): ?>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input type="password" id="password" name="customer[password]" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password *</label>
+                    <input type="password" id="confirm_password" name="customer[confirm_password]" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Address Information</h3>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="street_address">Street Address *</label>
+                    <input type="text" id="street_address" name="customer[street]" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">City *</label>
+                    <input type="text" id="city" name="customer[city]" required>
+                </div>
+                <div class="form-group">
+                    <label for="region">State/Region *</label>
+                    <input type="text" id="region" name="customer[state]" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="country">Country *</label>
+                    <select id="country" name="customer[country]" required>
+              <option value="">Select Country</option>
+              <option value="India">India</option>
+              <option value="USA">United States</option>
+              <option value="Canada">Canada</option>
+              <option value="UK">United Kingdom</option>
+            </select>
+                </div>
+                <div class="form-group">
+                    <label for="zipcode">Postal/ZIP Code *</label>
+                    <input type="text" id="zipcode" name="customer[zip_code]" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="address_type">Address Type *</label>
+                    <select id="address_type" name="customer[address_type]" required>
+                        <option value="home">Home</option>
+                        <option value="work">Work</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <?php endif; ?>
+
+        <div class="form-section">
+            <div class="form-row">
+                <div class="form-group checkbox-group full-width">
+                    <label class="checkbox-container">
+              <input type="checkbox" id="terms" name="terms" required>
+              <span class="checkmark"></span>
+              I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>
+            </label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <button type="submit" class="submit-btn"><?php echo (empty($customer->getCustomerId())) ? 'Create Account' : 'Update Information' ?></button>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                Already have an account? <a href="<?php echo $this->getUrl('*/*/login'); ?>">Log in</a>
+            </div>
+        </div>
+
+        <!-- Hidden fields for system use -->
+        <input type="hidden" id="customer_id" name="customer_id" value="">
+        <input type="hidden" id="address_id" name="address_id" value="">
+        <input type="hidden" id="created_at" name="created_at" value="">
+        <input type="hidden" id="updated_at" name="updated_at" value="">
+    </form>
+</div>

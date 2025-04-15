@@ -1,0 +1,62 @@
+<div class="container">
+    <header>
+        <h1>Order List</h1>
+    </header>
+
+    <div class="card">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order No</th>
+                        <th>Customer ID</th>
+                        <th>Date Placed</th>
+                        <th>Coupon</th>
+                        <th>Shipping</th>
+                        <th>Payment</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($this->getOrderData() as $order): ?>
+                    <tr>
+                        <td><span class="order-id"><?= $order->getOrderId() ?></span></td>
+                        <td><span class="order-id"><?= $order->getOrderNo() ?></span></td>
+                        <td>
+                            <?= $order->getCustomerId() ?>
+                        </td>
+                        <td><span class="date-placed"><?= date("M d, Y", strtotime($order->getCreatedAt())); ?></span></td>
+                        <td>
+                            <?= $order->getCouponCode(); ?> <span class="price">(₹<?= $order->getCouponDiscount(); ?>)</span></td>
+                        <td>
+                            <?= $order->getShippingMethod(); ?> <span class="price">₹<?= $order->getShippingPrice(); ?></span></td>
+                        <td>
+                            <?= $order->getPaymentMethod(); ?>
+                        </td>
+                        <td><span class="price">₹<?= $order->getTotalAmount(); ?></span></td>
+                        <td>
+                            <!-- <form class="status-form" action="<?= $this->getUrl('*/*/updateStatus'); ?>" method="post"> -->
+                            <!-- <form class="status-form"> -->
+                            <!-- <input type="hidden" class="order_id" name="order[order_id]" value="<?= $order->getOrderId(); ?>"> -->
+                            <select class="orderStatus" data-order_id="<?= $order->getOrderId(); ?>" name="order[order_status]">
+                                <option <?php echo ($order->getOrderStatus() == 'pending') ? 'selected' : ''; ?> value="pending" selected>Pending</option>
+                                <option <?php echo ($order->getOrderStatus() == 'processing') ? 'selected' : ''; ?> value="processing">Processing</option>
+                                <option <?php echo ($order->getOrderStatus() == 'shipped') ? 'selected' : ''; ?> value="shipped">Shipped</option>
+                                <option <?php echo ($order->getOrderStatus() == 'delivered') ? 'selected' : ''; ?> value="delivered">Delivered</option>
+                                <option <?php echo ($order->getOrderStatus() == 'cancelled') ? 'selected' : ''; ?> value="cancelled">Cancelled</option>
+                            </select>
+                            <!-- </form> -->
+                        </td>
+
+                        <td><a href="<?php echo $this->getUrl('*/*/view') . '/?order_id=' . $order->getOrderId(); ?>" class="view-btn">View</a></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php $this->getChildHtml('toolbar'); ?>

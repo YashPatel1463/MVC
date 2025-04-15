@@ -1,0 +1,78 @@
+<?php
+$currentLimit = isset($_GET['limit']) ? (int) $_GET['limit'] : 5;
+$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$totalRecords = $this->getTotalRecords();
+
+$totalPages = ceil($totalRecords / $currentLimit);
+$startPage = max(1, $currentPage - 2);
+$endPage = min($totalPages, $startPage + 4);
+?>
+
+    <div class="pagination-wrapper">
+        <h1>Records Management</h1>
+
+        <div class="toolbar-container">
+            <div class="records-info">
+                <span>Showing <?= min($totalRecords, ($currentPage - 1) * $currentLimit + 1) ?> to
+                <?= min($totalRecords, $currentPage * $currentLimit) ?> of <?= $totalRecords ?> records</span>
+            </div>
+
+            <form action="<?php $this->getUrl('*/*/list/') ?>" method="get" class="pagination-form" id="pagination-form">
+                <div class="pagination-controls">
+                    <div class="limit-selector">
+                        <label for="limit">Show:</label>
+                        <select name="limit" id="limit" onchange="this.form.submit()">
+                        <option value="2" <?= $currentLimit == 2 ? 'selected' : '' ?>>2</option>
+                        <option value="5" <?= $currentLimit == 5 ? 'selected' : '' ?>>5</option>
+                        <option value="10" <?= $currentLimit == 10 ? 'selected' : '' ?>>10</option>
+                        <option value="20" <?= $currentLimit == 20 ? 'selected' : '' ?>>20</option>
+                        <option value="50" <?= $currentLimit == 50 ? 'selected' : '' ?>>50</option>
+                    </select>
+                    </div>
+                    <div class="pagination">
+                        <?php if ($currentPage > 1): ?>
+                        <a href="#" onclick="setPage(1)" class="page-link first-page" title="First Page">«</a>
+                        <a href="#" onclick="setPage(<?= $currentPage - 1 ?>)" class="page-link prev-page" title="Previous Page">‹</a>
+                        <?php else: ?>
+                        <span class="page-link disabled">«</span>
+                        <span class="page-link disabled">‹</span>
+                        <?php endif; ?>
+
+                        <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
+                        <?php if ($i == $currentPage): ?>
+                        <span class="page-link current"><?= $i ?></span>
+                        <?php else: ?>
+                        <a href="#" onclick="setPage(<?= $i ?>)" class="page-link">
+                            <?= $i ?>
+                        </a>
+                        <?php endif; ?>
+                        <?php endfor; ?>
+
+                        <?php if ($currentPage < $totalPages): ?>
+                        <a href="#" onclick="setPage(<?= $currentPage + 1 ?>)" class="page-link next-page" title="Next Page">›</a>
+                        <a href="#" onclick="setPage(<?php echo $totalPages ?>)" class="page-link last-page" title="Last Page">»</a>
+                        <?php else: ?>
+                        <span class="page-link disabled">›</span>
+                        <span class="page-link disabled">»</span>
+                        <?php endif; ?>
+                    </div>
+                    <input type="hidden" name="page" id="page-input" value="<?= $currentPage ?>">
+                    <!-- <div class="page-input">
+                        <label for="page">Go to:</label> -->
+                    <!-- <input type="number" name="page" id="page" min="1" max="<?php //$totalPages ?>"
+                            value="<?php //$currentPage ?>" placeholder="Page">
+                        <button type="submit" class="go-button">Go</button> -->
+                    <!-- </div> -->
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function setPage(page) {
+            event.preventDefault();
+            document.getElementById('page-input').value = page;
+            document.getElementById('pagination-form').submit();;
+
+        }
+    </script>

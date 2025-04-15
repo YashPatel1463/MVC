@@ -1,0 +1,104 @@
+/* Order Address Block CSS */
+
+.order-addresses-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 32px;
+    font-family: Arial, sans-serif;
+}
+
+@media (min-width: 768px) {
+    .order-addresses-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+.address-block {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.address-block h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 18px;
+    color: #333333;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.address-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #555555;
+}
+
+.address-name {
+    font-weight: 600;
+    color: #333333;
+    font-size: 16px;
+}
+
+.address-phone {
+    margin-bottom: 8px;
+}
+
+.address-street {
+    margin-bottom: 4px;
+}
+
+.address-city-region {
+    margin-bottom: 2px;
+}
+
+.address-type {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #666666;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+}
+
+.address-meta {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed #eeeeee;
+    font-size: 13px;
+    color: #888888;
+}
+
+.billing-address {
+    border-left: 4px solid #f59e0b;
+}
+
+.shipping-address {
+    border-left: 4px solid #3b82f6;
+}
+
+
+/* Add a small indicator when same as billing */
+
+.same-as-billing {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #10b981;
+}
+
+.same-as-billing::before {
+    content: "✓";
+    font-size: 12px;
+}

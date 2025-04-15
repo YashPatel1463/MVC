@@ -1,0 +1,67 @@
+<div>
+    <a href="<?= $this->getUrl('*/*/list') ?>"><button class="btn btn-success">Back</button></a>
+    <h1>
+        <?= $this->getTitle(); ?>
+    </h1>
+    <table>
+        <tr>
+            <th>Total users</th>
+            <th>Pending</th>
+            <th>Approved</th>
+            <th>Rejected</th>
+        </tr>
+        <tr id="counts">
+            <td>
+                <?php echo $this->getTotalUser(); ?>
+            </td>
+            <td>
+                <?= $this->getPendingUser() ?>
+            </td>
+            <td>
+                <?= $this->getApproveUser() ?>
+            </td>
+            <td>
+                <?= $this->getRejectUser() ?>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+    <hr>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Registration Id</th>
+                <th>User Id</th>
+                <th>Event Id</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="grid-data">
+            <?php foreach($this->getEvents() as $event):  ?>
+            <tr>
+                <td>
+                    <?= $event->getRegistrationId() ?>
+                </td>
+                <td>
+                    <?= $event->getUserId() ?>
+                </td>
+                <td>
+                    <?= $event->getEventId() ?>
+                </td>
+                <td>
+                    <?php if($event->getStatus() == 'pending'): ?>
+                    <button class="btn btn-primary status" data-registration_id="<?= $event->getRegistrationId(); ?>" id="approve" value="approve">Approve</button>
+                    <button class="btn btn-danger status" data-registration_id="<?= $event->getRegistrationId(); ?>" id="reject" value="reject">Reject</button>
+                    <?php else: ?>
+                    <?= $event->getStatus() ?>
+                        <?php endif; ?>
+                </td>
+
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

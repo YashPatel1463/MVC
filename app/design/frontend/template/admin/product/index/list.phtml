@@ -1,0 +1,77 @@
+<?php $products = $this->getProductsData(); ?>
+
+<h2 class="text-center">Product List</h2>
+
+<div class="table-container">
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn bg-success" href="<?php echo $this->getUrl('*/*/export') ?>">Export CSV</a>
+        <a class="btn btn-primary" href="<?php echo $this->getUrl('*/*/new') ?>">add product</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>SKU</th>
+                <th>Price</th>
+                <th>Stock Quantity</th>
+                <th>Category Id</th>
+                <?php foreach ($this->getAttributes() as $attribute): ?>
+                <th>
+                    <?= $attribute->getName(); ?>
+                </th>
+                <?php endforeach; ?>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <?php foreach ($products as $product): ?>
+            <tr class="text-center">
+                <td>
+                    <?php echo ($product->getProductId()); ?>
+                </td>
+                <td>
+                    <?php echo ($product->getName()); ?>
+                </td>
+                <td>
+                    <?php echo substr($product->getDescription(),0,30); ?>
+                </td>
+                <td>
+                    <?php echo ($product->getSku()); ?>
+                </td>
+                <td>
+                    <?php echo ($product->getPrice()); ?>
+                </td>
+                <td>
+                    <?php echo ($product->getStockQuantity()); ?>
+                </td>
+                <td>
+                    <?php echo ($product->getCategoryId()); ?>
+                </td>
+                <?php foreach ($this->getAttributes() as $attribute): ?>
+                <td>
+                    <?php 
+                        $attr = $attribute->getAttributeCode();
+                        echo ($product->$attr) ? $product->$attr : "--";
+                        ?>
+                </td>
+                <?php endforeach; ?>
+                <td>
+                    <!-- Edit Link -->
+                    <a href="<?= $this->getUrl('*/*/new') ?>/?edit_id=<?= $product->getProductId(); ?>" class="btn edit-btn">Edit</a>
+
+                    <!-- Delete Link with Confirmation -->
+                    <a href="<?= $this->getUrl('*/*/delete') ?>/?delete_id=<?= $product->getProductId(); ?>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?');">
+                        Delete
+                    </a>
+
+                </td>
+            </tr>
+            <?php endforeach ?>
+
+        </tbody>
+    </table>
+</div>
+<?php $this->getChildHtml('toolbar'); ?>

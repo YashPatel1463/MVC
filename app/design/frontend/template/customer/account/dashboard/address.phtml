@@ -1,0 +1,56 @@
+<div class="col-12">
+    <div class="card custom-card shadow-sm mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="card-title mb-0">My Addresses</h5>
+            <a href="<?php echo $this->getUrl('*/account_address/new'); ?>" class="btn btn-primary btn-sm" id="addAddressBtn">
+                <i class="bi bi-plus-circle me-1"></i> Add New Address
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="row g-3" id="addressGrid">
+                <!-- Dynamic address data -->
+                <?php foreach($this->getCustomerAddress() as $address): ?>
+                <div class="col-lg-4">
+                    <div class="card h-100 address-card">
+                        <div class="card-header address-header d-flex justify-content-between py-2">
+                            <h6 class="mb-0 fw-bold">
+                                <?= ucwords($address->getAddressType()); ?>
+                            </h6>
+                            <?php if($address->getDefaultAddress() == 1): ?>
+                            <span class="badge bg-success default-badge">Default</span>
+                            <?php endif; ?>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-1">
+                                <?= $address->getName(); ?>
+                            </p>
+                            <p class="mb-1">
+                                <?= $address->getStreet(); ?>
+                            </p>
+                            <p class="mb-1">
+                                <?= $address->getCity() . ', ' . $address->getState() . ' ' . $address->getZipCode(); ?>
+                            </p>
+                            <p class="mb-1">
+                                <?= $address->getCountry(); ?>
+                            </p>
+                            <p class="mb-0">
+                                <?= $address->getTelephone(); ?>
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white address-actions">
+                            <div class="btn-group btn-group-sm">
+                                <a href="<?php echo $this->getUrl('*/account_address/new') .'/?address_id='.$address->getAddressId(); ?>" class="btn btn-outline-primary">Edit</a>
+                                <a href="<?php echo $this->getUrl('*/account_address/delete') .'/?delete_id='.$address->getAddressId(); ?>" class="btn btn-danger">Delete</a>
+                                <?php if($address->getDefaultAddress() != 1): ?>
+
+                                <a class="btn btn-secondary defaultAddress" id="<?= $address->getAddressId(); ?>">Set as Default</a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>

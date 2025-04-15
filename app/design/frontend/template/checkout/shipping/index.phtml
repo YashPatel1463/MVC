@@ -1,0 +1,132 @@
+<?php
+$data = $this->getCartItems();
+$cartData = $this->getCartData();
+//Mage::log($cartData);
+$shippingMethods = $this->getShippingMethods();
+?>
+
+    <div class="checkout-container">
+        <!-- Left Column: Checkout Process -->
+        <div class="checkout-main">
+            <!-- Shipping Method -->
+            <div class="checkout-section">
+                <h3 class="section-title">Shipping Method</h3>
+
+                <form id="billing-form" action="<?php echo $this->getUrl('*/*/save') ?>" method="post">
+
+                    <div class="shipping-options">
+                        <?php foreach ($shippingMethods as $method => $charge): 
+                        $checked = ($method == $cartData->getShippingMethod()) ? "checked" : "";
+                        ?>
+                        <div class="shipping-option">
+                            <input type="radio" <?php echo $checked; ?> id="
+                            <?php echo str_replace(' ', '_', $method) ?>" name="shipping_method" value="
+                            <?php echo $method; ?>">
+                            <label for="<?php echo str_replace(' ', '_', $method) ?>">
+                                <span class="method-name"><?= $method ?></span>
+
+                                <!-- <span class="method-info">5-7 business days</span> -->
+                                <span class="method-price">₹ <?= $charge ?></span>
+                            </label>
+                        </div>
+                        <?php endforeach; ?>
+                        <span id="shipping-method-error"></span>
+                    </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="checkout-section">
+                <h3 class="section-title">Payment Method</h3>
+                <div class="payment-options">
+                    <?php foreach ($this->getPaymentMethods() as $method): ?>
+
+                    <div class="payment-option">
+                        <input type="radio" <?php echo ($method==$cartData->getPaymentMethod()) ? "checked" : ""; ?> name="payment_method" value="
+                        <?= $method ?>">
+                            <label for="payment"><?= $method ?></label>
+                    </div>
+                    <?php endforeach; ?>
+
+                </div>
+            </div>
+            <!-- <button class="save-data-btn">Save Information</button> -->
+            </form>
+        </div>
+
+        <!-- Right Column: Order Summary -->
+        <div class="order-summary">
+            <h3 class="section-title">Order Summary</h3>
+
+            <!-- Cart Items -->
+            <div class="summary-items">
+                <?php foreach ($data as $_data): ?>
+                <div class="summary-item">
+                    <div class="item-image">
+                        <img src="<?php echo Mage::getBaseUrl() . $_data->getProduct()->getDefaultImage(); ?>" alt="<?php echo $_data->getProduct()->getName(); ?>">
+                        <span class="item-qty"><?= $_data->getProductQuantity() ?></span>
+                    </div>
+                    <div class="item-details">
+                        <h4>
+                            <?php echo $_data->getProduct()->getName(); ?>
+                        </h4>
+                        <p class="item-sku">SKU:
+                            <?php echo $_data->getProduct()->getSku(); ?>
+                        </p>
+                    </div>
+                    <div class="item-price">₹
+                        <?php echo $_data->getSubTotal(); ?>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+
+            <!-- Coupon Code -->
+            <div class="coupon-section">
+                <form action="<?php echo $this->getUrl('*/cart/applyCoupon'); ?>" method="post">
+                    <div class="coupon-input-group">
+                        <input type="text" id="coupon_code" name="coupon[coupon_code]" value="<?php echo $cartData->getCouponCode() ?>" placeholder="Enter coupon code">
+                        <input type="hidden" name="coupon[subTotal]" value="<?php echo $this->getTotalAmount(); ?>">
+                        <?php if ($cartData->getCouponCode() == ""): ?>
+                        <button class="apply-btn" name="coupon[type]" value="apply">Apply</button>
+                        <?php else: ?>
+                        <button class="remove-coupon-btn" name="coupon[type]" value="remove">Remove</button>
+                        <?php endif; ?>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Order Totals -->
+            <div class="order-totals">
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span class="amount">₹<?php echo $this->getTotalAmount(); ?></span>
+                </div>
+                <div class="total-row">
+                    <span>Discount:</span>
+                    <span class="amount discount-amount">₹<?php echo $cartData->getCouponDiscount() ?? '0.00'; ?></span>
+                </div>
+                <div class="total-row">
+                    <span>Tax:</span>
+                    <span class="amount">₹<?php echo '0.00'; ?></span>
+                </div>
+                <div class="total-row">
+                    <span>Shipping charge:</span>
+                    <span class="amount" id="shipping-cost">₹<?php echo $cartData->getShippingPrice();  ?></span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total:</span>
+                    <span class="amount">₹<?php echo $cartData->getTotalAmount(); ?></span>
+                </div>
+            </div>
+
+            <!-- Place Order Button -->
+            <a href="http://localhost/mvcproject/checkout/order/placeOrder">
+                <button class="place-order-btn">Place Order</button>
+            </a>
+
+            <!-- Security Info -->
+            <div class="security-info ">
+                <p><i class="fa fa-lock "></i> Secure checkout - Your personal and payment information is secure</p>
+            </div>
+        </div>
+    </div>

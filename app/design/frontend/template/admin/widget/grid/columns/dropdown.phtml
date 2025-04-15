@@ -1,0 +1,6 @@
+<?php //Mage::log($this->getType()); ?>
+<select class="<?= implode(' ', $this->getType()['class']); ?>" data-order_id="<? php //$order->getOrderId(); ?>" name="order[order_status]">
+    <?php foreach ($this->getType()['option'] as $value): ?>
+    <option <?php echo ($this->getType()['id'] == $value) ? 'selected' : ''; ?> value="<?= $value ?>"><?= ucfirst($value); ?></option>
+    <?php endforeach; ?>
+</select>

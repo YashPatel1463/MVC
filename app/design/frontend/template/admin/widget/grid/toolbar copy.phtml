@@ -1,0 +1,21 @@
+<div class="content-wrapper">
+    <div class="records-info" data-total-records="<?= $this->getTotalRecords(); ?>">
+    </div>
+
+    <!-- <form action="<?php $this->getUrl('*/*/*') ?>" method="get"> -->
+    <div class="pagination-wrapper">
+        <div class="per-page-selector">
+            <label for="limit">Number of Rows:</label>
+            <select id="limit" name="limit">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                </select>
+        </div>
+
+        <div class="pagination">
+        </div>
+    </div>
+    <!-- </form> -->
+</div>

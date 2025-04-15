@@ -1,0 +1,92 @@
+<?php
+    $data = $this->getProductData();
+    $categories = $this->getCategoryData();
+    $attribute = $this->getAttributeData();
+?>
+    <div class="container mt-5">
+        <div class="card form-container">
+            <div class="card-header bg-primary text-white">Add Product</div>
+            <div class="card-body">
+                <form method="POST" action="<?php echo $this->getUrl('*/*/save') ?>" enctype="multipart/form-data">
+                    <input type="hidden" name="catalog_product[product_id]" value="<?= $data->getProductId() ?>">
+                    <div class="mb-3">
+                        <label class="form-label">Product Name</label>
+                        <input type="text" name="catalog_product[name]" class="form-control" value="<?= $data->getName() ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="catalog_product[description]" class="form-control" rows="3"><?= $data->getDescription() ?></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">SKU</label>
+                        <input type="text" name="catalog_product[sku]" class="form-control" value="<?= $data->getSku() ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Price (₹)</label>
+                        <input type="number" step="0.01" name="catalog_product[price]" class="form-control" value="<?= $data->getPrice() ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Stock Quantity</label>
+                        <input type="number" name="catalog_product[stock_quantity]" class="form-control" value="<?= $data->getStockQuantity() ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select name="catalog_product[category_id]" class="form-control" required>
+                        <option value="">Select Category</option>
+                        <?php foreach ($categories as $category): 
+                                $select = ($category->getCategoryId() == $data->getCategoryId()) ? "selected" : "";
+                        ?>
+                            <option <?= $select ?> value="<?= $category->getCategoryId() ?>"><?= htmlspecialchars($category->getName()) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    </div>
+
+                    <hr>
+                    <div class="card-header bg-primary text-white">Add Product Attribute</div>
+
+                    <?php foreach($attribute as $attr): ?>
+                    <?php $attributename = $attr->getAttributeCode(); ?>
+                    <div class="mb-3">
+                        <?php echo $this->getHtmlField('label',['for'=>$attr->getName(),'class'=>'form-label']) ?>
+                        <?php echo $this->getHtmlField($attr->getType(),['class'=>$attr->getName(), 'name'=>'catalog_product['.$attr->getAttributeCode().']', 'value'=>$data->$attributename]) ?>
+                    </div>
+                    <?php endforeach; ?>
+
+                    <hr>
+                    <div class="card-header bg-primary text-white">Add Product Images </div>
+
+                    <div class="mb-3">
+                        <!-- <label class="form-label">Image</label>
+                        <input type="file" name="catalog_product_media[image][]" class="form-control" multiple> -->
+                        <label for="image">Choose Images:</label>
+                        <input type="file" id="image" name="catalog_product[image][]" accept=".png, .jpg, .jpeg" multiple onchange="previewImages(event)">
+
+                        <div id="image-preview-container"></div>
+
+                        <?php $filePath = $data->getFilePath(); ?>
+                        <?php if(!empty($filePath)): ?>
+                        <label class="deleteimagelabel">Delete: </label>
+                        <label class="defaultimagelabel">default Image: </label>
+
+                        <?php foreach($filePath as $file): 
+                            $checked = ($data->getDefaultImage() == $file) ? "checked" : "";
+                        ?>
+                        <div class="d-flex align-items-center mb-2">
+                            <img src="<?= Mage::getBaseUrl().$file ?>" height="100px" width="100px" class="p-1">
+                            <input type="checkbox" id="deleteimg" name="catalog_image_delete[images][]" value="<?= $file ?>" class="w-25">
+
+                            <input type="radio" <?php echo $checked; ?> name="catalog_product[default_image]" value="
+                            <?= $file ?>" id="defaultimg">
+                        </div>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Display Image Previews with Radio Buttons -->

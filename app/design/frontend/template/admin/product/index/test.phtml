@@ -1,0 +1,49 @@
+<div class="form-container">
+<div class="form-group">
+    <?php echo $this->getHtmlField('label',['for'=>'name']) ?>
+    <?php echo $this->getHtmlField('text',['id'=>'middlename', 'class'=>'color']) ?>
+</div>
+
+<div class="form-group">
+    <?php echo $this->getHtmlField('label',['for'=>'address']) ?>
+    <?php echo $this->getHtmlField('textarea',['id'=>'address', 'class'=>'blue']) ?>
+</div>
+
+<div class="form-group" id="radiobtn">
+    <?php echo $this->getHtmlField('label',['for'=>'gender']) ?>
+    <?php echo $this->getHtmlField('choice',
+                                    ['type'=>'radio', 
+                                    'id'=>'gender', 
+                                    'name'=>'gender',
+                                    'option'=>[
+                                                'male'=>'Male',
+                                                'female'=>'Female',
+                                                'other'=>'Other']]) ?>
+</div>
+
+<div class="form-group" id="radiobtn">
+    <?php echo $this->getHtmlField('label',['for'=>'language']) ?>
+    <?php echo $this->getHtmlField('choice',
+                                    ['type'=>'checkbox', 
+                                    'id'=>'language', 
+                                    'name'=>'language',
+                                    'option'=>[
+                                                'gujarati'=>'Gujarati',
+                                                'hindi'=>'Hindi',
+                                                'english'=>'English']]) ?>
+</div>
+
+<div class="form-group">
+    <?php echo $this->getHtmlField('label',['for'=>'city']) ?>
+    <?php echo $this->getHtmlField('select',
+                                    ['name'=>'city',
+                                    'id'=>'city',
+                                    'option'=>[
+                                                'ahmedabad'=>'Ahmedabad',
+                                                'surat'=>'Surat',
+                                                'rajkot'=>'Rajkot',
+                                                'gandhinagar'=>'Gandhinagar']]) ?>
+</div>
+
+
+</div>

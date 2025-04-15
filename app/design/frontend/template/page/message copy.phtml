@@ -1,0 +1,19 @@
+<?php foreach($this->getAllMessages() as $type => $messages): 
+    $function = 'get'.ucfirst($type);
+?>
+
+<?php foreach($this->$function() as $message): ?>
+<div class="alert alert-<?= ($type == 'error') ? 'danger' : $type; ?> d-flex align-items-center" role="alert">
+    <?php if($type == 'success'): ?>
+    <i class="bi bi-check-circle-fill flex-shrink-0 me-2" style="font-size: 24px;"></i>
+    <?php elseif($type == 'warning'): ?>
+    <i class="bi bi-check-circle-fill flex-shrink-0 me-2" style="font-size: 24px;"></i>
+    <?php elseif($type == 'error'): ?>
+    <i class="bi bi-x-circle-fill flex-shrink-0 me-2" style="font-size: 24px;"></i>
+    <?php endif; ?>
+    <div>
+        <?= htmlspecialchars($message); ?>
+    </div>
+</div>
+<?php endforeach; ?>
+<?php endforeach; ?>

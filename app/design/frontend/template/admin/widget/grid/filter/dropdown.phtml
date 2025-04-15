@@ -1,0 +1,6 @@
+<select name="filter">
+    <option value="all">All</option>
+    <?php foreach ($this->getFilter()['option'] as $value): ?>
+    <option value="<?= $value ?>"><?= ucfirst($value); ?></option>
+    <?php endforeach; ?>
+</select>

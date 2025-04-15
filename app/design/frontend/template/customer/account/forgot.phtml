@@ -1,0 +1,103 @@
+<div class="forgot-container">
+    <!-- <div class="step-container">
+        <div class="step-indicators">
+            <div class="step active" id="step-1">
+                <div class="step-number">1</div>
+                <div class="step-title">Email</div>
+            </div>
+            <div class="step" id="step-2">
+                <div class="step-number">2</div>
+                <div class="step-title">OTP</div>
+            </div>
+            <div class="step" id="step-3">
+                <div class="step-number">3</div>
+                <div class="step-title">New Password</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+    </div> -->
+
+    <div class="step-content active" id="content-1">
+        <h1>Forgot Password</h1>
+        <p class="description">Enter your email address to receive a verification code</p>
+
+        <!-- <form action="<?php //echo $this->getUrl('*/*/sendOtp'); ?>" method="post"> -->
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email address">
+        </div>
+
+        <div class="button-container">
+            <div></div>
+            <!-- Empty div for spacing -->
+            <button id="btn-sendOtp">Get Verification Code</button>
+        </div>
+        <!-- </form> -->
+    </div>
+
+    <div class="step-content" id="content-2">
+        <h1>Enter Verification Code</h1>
+        <p class="description">We've sent a 4-digit code to your email address</p>
+
+        <div class="otp-inputs">
+            <input type="text" class="otp-input" id="otp1" maxlength="1" autofocus>
+            <input type="text" class="otp-input" id="otp2" maxlength="1">
+            <input type="text" class="otp-input" id="otp3" maxlength="1">
+            <input type="text" class="otp-input" id="otp4" maxlength="1">
+        </div>
+
+        <a href="#" class="resend-otp">Resend code</a>
+
+        <div class="button-container">
+            <button class="back" onclick="prevStep(2, 1)">Back</button>
+            <button id="btn-verifyOtp">Verify</button>
+        </div>
+    </div>
+
+    <div class="step-content" id="content-3">
+        <h1>Create New Password</h1>
+        <p class="description">Your new password must be different from your previous passwords</p>
+
+        <div class="form-group">
+            <label for="password">New Password</label>
+            <input type="password" id="new-password" placeholder="Enter new password">
+            <span id="passwordError"></span>
+            <div class="password-requirements">
+                <div class="password-requirement">
+                    <div class="requirement-icon"></div>
+                    <div class="requirement-text">At least 8 characters</div>
+                </div>
+                <div class="password-requirement">
+                    <div class="requirement-icon"></div>
+                    <div class="requirement-text">Contains uppercase & lowercase letters</div>
+                </div>
+                <div class="password-requirement">
+                    <div class="requirement-icon"></div>
+                    <div class="requirement-text">Contains at least one number</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" placeholder="Confirm your new password">
+            <span id="confirmError"></span>
+        </div>
+
+        <div class="button-container">
+            <button class="back">Back</button>
+            <button id="btn-resetPassword">Reset Password</button>
+        </div>
+    </div>
+
+    <div class="step-content" id="content-4">
+        <h1>Password Change Successfully.</h1>
+        <p class="description">You can now login with you new password.</p>
+        <a href="<?= $this->getUrl('*/*/login'); ?>"><button>Login</button></a>
+    </div>
+
+
+</div>

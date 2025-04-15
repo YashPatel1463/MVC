@@ -1,0 +1,61 @@
+<?php $products = $this->getItemsData(); ?>
+<?php $info = $this->getOrdersDetail(); ?>
+<div class="order-items-container">
+    <h2>Order Items</h2>
+    <table class="order-items-table">
+        <thead>
+            <tr>
+                <th class="item-image">Image</th>
+                <th class="item-details">Product Id</th>
+                <th class="item-details">Product Name</th>
+                <th class="item-price">Price</th>
+                <th class="item-quantity">Quantity</th>
+                <th class="item-subtotal">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($products as $product): ?>
+            <tr class="order-item">
+                <td class="item-image">
+                    <div class="product-image">
+                        <img src="http://localhost/mvcproject/<?php echo $product->getProduct()->getDefaultImage(); ?>" alt="<?= $product->getProduct()->getName(); ?>" id="product-image" />
+                    </div>
+                </td>
+                <td><span id="product-id"><?= $product->getProduct()->getProductId(); ?></span></td>
+                <td class="item-details">
+                    <div class="product-name" id="product-name">
+                        <?= $product->getProduct()->getName(); ?>
+                    </div>
+                </td>
+                <td class="item-price">₹<span id="product-price"><?= $product->getProduct()->getPrice(); ?></span></td>
+                <td class="item-quantity"><span id="product-quantity"><?= $product->getProductQuantity(); ?></span></td>
+                <td class="item-subtotal">₹<span id="product-subtotal"><?= $product->getSubTotal(); ?></span></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+        <tfoot>
+            <tr class="order-subtotal">
+                <td colspan="5" class="total-label">Subtotal</td>
+                <td class="total-value">₹<span id="order-subtotal"><?= $this->getSubTotal(); ?></span></td>
+            </tr>
+            <tr class="order-discount">
+                <td colspan="5" class="total-label">
+                    Discount
+                    <?php if($info->getCouponCode()): ?>
+                    <span class="coupon-code">(<?= $info->getCouponCode() ?>)</span>
+                    <?php endif; ?>
+                </td>
+                <td class="discount-value">-₹<span id="order-discount"><?= $info->getCouponDiscount() ?></span></td>
+            </tr>
+            <tr class="order-shipping">
+                <td colspan="5" class="total-label">Shipping Charges (
+                    <?= $info->getShippingMethod() ?>)</td>
+                <td class="total-value">₹<span id="order-shipping"><?= $info->getShippingPrice() ?></span></td>
+            </tr>
+            <tr class="order-total">
+                <td colspan="5" class="total-label">Order Total</td>
+                <td class="total-value">₹<span id="order-total"><?= $info->getTotalAmount() ?></span></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
