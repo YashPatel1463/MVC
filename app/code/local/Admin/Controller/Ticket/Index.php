@@ -1,7 +1,9 @@
-<?php 
+<?php
 
-class Admin_Controller_Ticket_Index extends Core_Controller_Admin_Action {
-    public function listAction() {
+class Admin_Controller_Ticket_Index extends Core_Controller_Admin_Action
+{
+    public function listAction()
+    {
         $list = $this->getLayout()
             ->createBlock('admin/ticket_index_list');
         $this->getLayout()
@@ -11,7 +13,8 @@ class Admin_Controller_Ticket_Index extends Core_Controller_Admin_Action {
             ->toHtml();
     }
 
-    public function newAction() {
+    public function newAction()
+    {
         $new = $this->getLayout()
             ->createBlock('admin/ticket_index_new');
         $this->getLayout()
@@ -24,18 +27,20 @@ class Admin_Controller_Ticket_Index extends Core_Controller_Admin_Action {
             ->toHtml();
     }
 
-    public function saveAction() {
+    public function saveAction()
+    {
         Mage::getModel('ticket/ticket')
             ->setData($this->getRequest()->getParam('ticket'))
             ->save();
-        
+
         $this->getMessage()
             ->addSuccess('Ticket Added Successfully.');
-        
+
         $this->redirect('admin/ticket_index/list');
     }
 
-    public function viewAction() {
+    public function viewAction()
+    {
         $view = $this->getLayout()
             ->createBlock('admin/ticket_index_view');
         $this->getLayout()
@@ -49,29 +54,48 @@ class Admin_Controller_Ticket_Index extends Core_Controller_Admin_Action {
             ->toHtml();
     }
 
-    public function saveCommentAction() {
+    public function saveCommentAction()
+    {
         $comments = $this->getRequest()->getParam('comment');
+        $parentIds = $this->getRequest()->getParam('parentIds');
 
+        $commetnParentId = array_column($comments, 'parent_id');
+        // Mage::log($comments);
+        $uniqueId = array_unique($commetnParentId);
+        // Mage::log($parentIds);
+        $noChildId = array_values(array_diff($parentIds, $uniqueId));
         foreach ($comments as $comment) {
-            if($comment['parent_id'] == null){
+            // var_dump($comment['parent_id']);
+            if ($comment['parent_id'] == null || $comment['parent_id'] == "") {
                 unset($comment['parent_id']);
             }
             Mage::getModel('ticket/comment')
                 ->setData($comment)
                 ->save();
         }
+        // die;
 
-        echo json_encode(["success"=>true, "message"=>"comments added successfully"]);
+        foreach ($noChildId as $id) {
+            if($id != 0) {
+                Mage::getModel('ticket/comment')
+                ->load($id)
+                ->setIsActive(0)
+                ->save();
+            }
+        }
+
+        echo json_encode(["success" => true, "message" => "comments added successfully"]);
     }
 
-    public function saveCompleteAction() {
+    public function saveCompleteAction()
+    {
         Mage::getModel('ticket/comment')
             ->load($this->getRequest()->getParams()['comment_id'])
             ->setIsActive(0)
             ->save();
 
-        echo json_encode(["success"=>true, "message"=>"comments completed successfully"]);
-        
+        echo json_encode(["success" => true, "message" => "comments completed successfully"]);
+
         // Mage::log($comment);
 
         // $comment->completeParentComment();
@@ -79,9 +103,5 @@ class Admin_Controller_Ticket_Index extends Core_Controller_Admin_Action {
 
         // $parent_id = $comment->getParentId();
         // echo $parent_id;
-
-
     }
 }
-
-?>

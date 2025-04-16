@@ -28,15 +28,17 @@ class Admin_Block_Ticket_Index_View extends Core_Block_Template
 
     public function getComments()
     {
-        if ($this->_comments == null) {
+        // if ($this->_comments == null) {
             $this->_comments =  Mage::getModel('ticket/comment')
                 ->getCollection()
-                ->addFieldToFilter('ticket_id', ['=' => $this->getId()])
-                ->addFieldToFilter('is_active', ['=' => '1'])
-                ->orderBy(['node_id'])
-                ->getData();
-        }
-        return $this->_comments;
+                ->addFieldToFilter('ticket_id', ['=' => $this->getId()]);
+            if($this->getRequest()->getQuery('comments') === 'true') {
+                $this->_comments->addFieldToFilter('is_active', ['=' => '1']);
+            }
+                
+            return $this->_comments->getData();
+        // }
+        // return $this->_comments;
     }
 
     public function buildCommentTree()
@@ -131,7 +133,8 @@ class Admin_Block_Ticket_Index_View extends Core_Block_Template
             'rowend' => $rowend,
             'rowstart' => $rowstart,
             'rowspan' => $child['count'],
-            'depth' => $maxChildDepth
+            'depth' => $maxChildDepth,
+            'is_active' => $child['is_active']
         ];
         if (count($child['children']) > 0) {
             foreach ($child['children'] as $key => $_child) {

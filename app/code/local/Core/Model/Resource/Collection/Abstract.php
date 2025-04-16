@@ -164,6 +164,10 @@ class Core_Model_Resource_Collection_Abstract
         if (is_array($val)) {
             foreach ($val as $operator => $value) {
                 switch (strtoupper($operator)) {
+                    case 'IS':
+                        $where = " {$column} {$operator} {$value} ";
+                        break;
+
                     case 'IN':
                     case 'NOT IN':
                         if (!is_array($value)) {

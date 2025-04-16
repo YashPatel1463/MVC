@@ -1,9 +1,14 @@
 $(function() {
     const urlParams = new URLSearchParams(window.location.search);
     const ticketId = urlParams.get('ticket_id');
+    let prevClass = '';
     $(document).on('click', ".add-btn", function(event) {
         const prevTd = $(this).parent().prev('td');
         const parentId = prevTd.data('id');
+        let classList = prevTd.attr('class');
+        prevClass = (classList || '').split(' ').find(cls => cls.startsWith('level-'));
+
+        // console.log(prevClass);
 
         const input = $('<input type="text" name="comments[]">').addClass('comment-input form-control');
         const hidden = $('<input type="hidden" name="parent_ids[]">').val(parentId);
@@ -14,9 +19,17 @@ $(function() {
         // e.preventDefault();
 
         let data = [];
+        let parentIds = [];
+        // const prevTd = $(this).parent().prev('td');
+        // console.log(prevClass);
+
 
         $('#commentTable tbody tr').each(function() {
+            // console.log($(this).find('.level-3'));
             // console.log($(this));
+            // console.log($(this).find('.' + prevClass).data('id'));
+
+            parentIds.push($(this).find('.' + prevClass).data('id'));
 
             $(this).find('.addComment').each(function() {
                 const textInputs = $(this).find('input[type="text"]');
@@ -29,7 +42,7 @@ $(function() {
                     const parentId = hiddenInputs.eq(index).val();
 
                     // console.log(commentText);
-                    console.log(parentId);
+                    // console.log(parentId);
 
                     if (commentText !== '') {
                         data.push({
@@ -43,7 +56,8 @@ $(function() {
         });
 
         const finalPayload = {
-            comment: data
+            'comment': data,
+            'parentIds': parentIds
         };
 
         console.log("Submitting:", finalPayload);
@@ -94,4 +108,18 @@ $(function() {
 
     });
 
+    $(document).on('click', "#completedcomments", function(event) {
+        urlParams.set("comments", "all");
+        // urlParams.delete("comments"); // Remove existing
+        console.log(urlParams.toString());
+        window.history.pushState({}, "", "?" + urlParams.toString());
+        location.reload();
+    });
+
+    $(document).on('click', "#continuecomments", function(event) {
+        urlParams.set("comments", true);
+        console.log(urlParams.toString());
+        window.history.pushState({}, "", "?" + urlParams.toString());
+        location.reload();
+    });
 });
