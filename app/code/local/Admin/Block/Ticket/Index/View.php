@@ -32,6 +32,7 @@ class Admin_Block_Ticket_Index_View extends Core_Block_Template
             $this->_comments =  Mage::getModel('ticket/comment')
                 ->getCollection()
                 ->addFieldToFilter('ticket_id', ['=' => $this->getId()])
+                ->addFieldToFilter('is_active', ['=' => '1'])
                 ->orderBy(['node_id'])
                 ->getData();
         }

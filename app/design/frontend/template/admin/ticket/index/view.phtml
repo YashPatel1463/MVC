@@ -24,14 +24,16 @@ $rows = $this->getRow();
                     <tr>
                         <?php endif; ?>
 
-                        <td rowspan="<?php echo $value['rowspan']; ?>" data-id="<?php echo $key; ?>">
+                        <td rowspan="<?php echo $value['rowspan']; ?>" data-id="<?php echo $key; ?>" class="position-relative">
                             <b><?php echo 'Id:' . $key; ?></b>
+                            <?php if($value['depth']-1 == $maxDepth-1): ?>
+                            <button type="button" class="btn btn-success complete position-absolute top-0 end-0 m-1"><i class="bi-check"></i></button>
+                            <?php endif; ?>
                             <br>
                             <?php echo $value['comment']; ?>
                         </td>
                         <?php if($value['depth'] == $maxDepth): ?>
                         <td class="addComment">
-                            <button type="submit" class="btn btn-success">Complete</button>
                             <button type="submit" class="add-btn">Add Comment</button>
                         </td>
                         <?php endif; ?>

@@ -6,5 +6,5 @@ class Ticket_Model_Ticket extends Core_Model_Abstract {
         $this->_collectionClassName = "Ticket_Model_Resource_Ticket_Collections";
     }
 }
-
+    
 ?>

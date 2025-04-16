@@ -62,22 +62,25 @@ class Admin_Controller_Ticket_Index extends Core_Controller_Admin_Action {
         }
 
         echo json_encode(["success"=>true, "message"=>"comments added successfully"]);
-        // $data = $this->getRequest()->getParams();
-        // $parentnodeid = $data['parentnode_id'];
-        // unset($data['parentnode_id']);
-        // if ($parentnodeid != 1) {
-        //     $commentId = Mage::getModel('ticket/comment')
-        //         ->getCollection()
-        //         ->addFieldToFilter('ticket_id', $data['ticket_id'])
-        //         ->addFieldToFilter('node_id', $parentnodeid)
-        //         ->getFirstItem()
-        //         ->getCommentId();
-        //     $data['parent_id'] = $commentId;
-        // }
-        // $a = Mage::getModel('ticket/comment')
-        //     ->setData($data)
-        //     ->save();
-        // Mage::log($a);
+    }
+
+    public function saveCompleteAction() {
+        Mage::getModel('ticket/comment')
+            ->load($this->getRequest()->getParams()['comment_id'])
+            ->setIsActive(0)
+            ->save();
+
+        echo json_encode(["success"=>true, "message"=>"comments completed successfully"]);
+        
+        // Mage::log($comment);
+
+        // $comment->completeParentComment();
+
+
+        // $parent_id = $comment->getParentId();
+        // echo $parent_id;
+
+
     }
 }
 

@@ -56,12 +56,39 @@ $(function() {
                 console.log("data updated");
                 console.log(response);
                 location.reload();
-                // $("#grid-data").html($(response).find("#grid-data").html());
-                // $("#counts").html($(response).find("#counts").html());
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);
                 alert("Failed to add comment in table!");
+            }
+        });
+
+    });
+
+    $(document).on('click', ".complete", function(event) {
+        // const prevTd = $(this).parent().prev('td');
+        // const parentId = prevTd.data('id');
+
+        const currentId = $(this).parent().data('id');
+        // console.log(currentId);
+
+        const data = {
+            'comment_id': currentId
+        };
+
+        // console.log("Submitting:", data);
+        $.ajax({
+            url: "http://localhost/mvcproject/admin/ticket_index/saveComplete",
+            type: "POST",
+            data: data,
+            success: function(response) {
+                console.log("data updated");
+                console.log(response);
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+                alert("Failed to complete comment in table!");
             }
         });
 
