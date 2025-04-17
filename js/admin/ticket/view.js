@@ -2,10 +2,13 @@ $(function() {
     const urlParams = new URLSearchParams(window.location.search);
     const ticketId = urlParams.get('ticket_id');
     let prevClass = '';
+    let level = '';
     $(document).on('click', ".add-btn", function(event) {
         const prevTd = $(this).parent().prev('td');
         const parentId = prevTd.data('id');
+        level = prevTd.data('level') + 1;
         let classList = prevTd.attr('class');
+
         prevClass = (classList || '').split(' ').find(cls => cls.startsWith('level-'));
 
         // console.log(prevClass);
@@ -48,7 +51,8 @@ $(function() {
                         data.push({
                             'comment': commentText,
                             'parent_id': parentId == 0 ? null : parentId,
-                            'ticket_id': ticketId
+                            'ticket_id': ticketId,
+                            'level': level
                         });
                     }
                 });
@@ -119,6 +123,16 @@ $(function() {
     $(document).on('click', "#continuecomments", function(event) {
         urlParams.set("comments", true);
         console.log(urlParams.toString());
+        window.history.pushState({}, "", "?" + urlParams.toString());
+        location.reload();
+    });
+
+    $(document).on('click', "#btn-lastlevel", function(event) {
+        console.log($(this).prev('#lastlevel').val());
+
+        $level = $(this).prev('#lastlevel').val();
+        urlParams.set("last", $level);
+        // console.log(urlParams.toString());
         window.history.pushState({}, "", "?" + urlParams.toString());
         location.reload();
     });

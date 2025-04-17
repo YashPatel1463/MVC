@@ -76,11 +76,11 @@ class Admin_Controller_Ticket_Index extends Core_Controller_Admin_Action
         // die;
 
         foreach ($noChildId as $id) {
-            if($id != 0) {
+            if ($id != 0) {
                 Mage::getModel('ticket/comment')
-                ->load($id)
-                ->setIsActive(0)
-                ->save();
+                    ->load($id)
+                    ->setIsActive(0)
+                    ->save();
             }
         }
 
@@ -103,5 +103,27 @@ class Admin_Controller_Ticket_Index extends Core_Controller_Admin_Action
 
         // $parent_id = $comment->getParentId();
         // echo $parent_id;
+    }
+
+    public function testAction()
+    {
+        $comments =  Mage::getModel('ticket/comment')
+            ->getCollection()
+            ->addFieldToFilter('ticket_id', ['=' => $this->getRequest()->getQuery('ticket_id')]);
+        if ($this->getRequest()->getQuery('comments') === 'true') {
+            $comments->addFieldToFilter('is_active', ['=' => '1']);
+        }
+
+        $subsql =  Mage::getModel('ticket/comment')
+            ->getCollection()
+            ->select(['maxlevel' => 'MAX(level)-5'])
+            ->addFieldToFilter('ticket_id', ['=' => $this->getRequest()->getQuery('ticket_id')])
+            ->getFirstItem()
+            ->getMaxlevel();
+
+        $sql = $comments->addFieldToFilter('level', ['>=' => $subsql])
+            ->prepareQuery();
+        Mage::log($subsql);
+        Mage::log($sql);
     }
 }

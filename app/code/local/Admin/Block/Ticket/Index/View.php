@@ -6,6 +6,7 @@ class Admin_Block_Ticket_Index_View extends Core_Block_Template
     protected $_comments = null;
     protected $_ticket = null;
     protected $_row = null;
+    protected $_start = null;
 
     public function __construct()
     {
@@ -21,7 +22,7 @@ class Admin_Block_Ticket_Index_View extends Core_Block_Template
     {
         if ($this->_ticket == null) {
             $this->_ticket =  Mage::getModel('ticket/ticket')
-                ->load($this->getId());
+                ->load($this->getRequest()->getQuery('ticket_id'));
         }
         return $this->_ticket;
     }
@@ -29,17 +30,49 @@ class Admin_Block_Ticket_Index_View extends Core_Block_Template
     public function getComments()
     {
         // if ($this->_comments == null) {
+        $params = $this->getRequest()->getQuery();
+        // Mage::log($params);
+
+        if (isset($params['ticket_id'])) {
+            // echo "12";
             $this->_comments =  Mage::getModel('ticket/comment')
                 ->getCollection()
-                ->addFieldToFilter('ticket_id', ['=' => $this->getId()]);
-            if($this->getRequest()->getQuery('comments') === 'true') {
+                ->addFieldToFilter('ticket_id', ['=' => $params['ticket_id']]);
+            if (isset($params['comments']) && $params['comments'] === 'true') {
                 $this->_comments->addFieldToFilter('is_active', ['=' => '1']);
             }
-                
-            return $this->_comments->getData();
+        }
+
+        if (isset($params['last'])) {
+            $this->_start =  Mage::getModel('ticket/comment')
+                ->getCollection()
+                ->select(['maxlevel' => 'MAX(level)-' . $params['last']])
+                ->addFieldToFilter('ticket_id', ['=' => $this->getRequest()->getQuery('ticket_id')])
+                // ->prepareQuery();
+                // Mage::log($last5);
+                // die;
+                ->getFirstItem()
+                ->getMaxlevel();
+            $this->_comments->addFieldToFilter('level', ['>' => $this->_start]);
+        } else {
+            $this->_start = null;
+        }
+
+        // Mage::log($this->_comments);
+        return $this->_comments->getData();
         // }
         // return $this->_comments;
     }
+    
+    public function getStartLevel() {
+        // echo $this->_start;
+        if($this->_start == null || $this->_start < 0) {
+            return 0;
+        } else {
+            return $this->_start;
+        }
+    }
+
 
     public function buildCommentTree()
     {
@@ -62,6 +95,8 @@ class Admin_Block_Ticket_Index_View extends Core_Block_Template
             } else {
                 if (isset($lookup[$parentId])) {
                     $lookup[$parentId]['children'][] = &$node;
+                } else {
+                    $tree[] = &$node;
                 }
             }
         }
@@ -70,7 +105,10 @@ class Admin_Block_Ticket_Index_View extends Core_Block_Template
         $newTree[0]['comment'] = $newTree[0]['title'];
         $newTree[0]['comment_id'] = 0;
         $newTree[0]['parent_id'] = 0;
+        $newTree[0]['level'] = 0;
         $newTree[0]['children'] = $tree;
+
+
 
         foreach ($newTree as &$node) {
             $this->assignCount($node);
@@ -113,8 +151,9 @@ class Admin_Block_Ticket_Index_View extends Core_Block_Template
         return $this->dfs($this->getTree()[0], 0);
     }
 
-    public function getRow() {
-        if($this->_row == null) {
+    public function getRow()
+    {
+        if ($this->_row == null) {
             $this->_row = $this->makeRow();
         }
         return $this->_row;
@@ -126,14 +165,14 @@ class Admin_Block_Ticket_Index_View extends Core_Block_Template
         $rowstart = ($index >= 1) ? 1 : 0;
         $rowend = (count($child['children']) == 0) ? 1 : 0;
         $id = $child['comment_id'];
-        $maxChildDepth = $depth;
         $row[$id] = [
             'parent_id' => $child['parent_id'],
             'comment' => $child['comment'],
             'rowend' => $rowend,
             'rowstart' => $rowstart,
             'rowspan' => $child['count'],
-            'depth' => $maxChildDepth,
+            'depth' => $depth,
+            'level' => $child['level'],
             'is_active' => $child['is_active']
         ];
         if (count($child['children']) > 0) {

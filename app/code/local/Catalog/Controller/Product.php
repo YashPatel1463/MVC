@@ -88,4 +88,5 @@ class Catalog_Controller_Product extends Core_Controller_Customer_Action
             echo "Error: " . $ex->getMessage();
         }
     }
+    
 }
